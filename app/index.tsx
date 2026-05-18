@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router';
-import { useOnboardingStore } from '@/store/onboardingStore';
-import { useHabitsStore, hasMainHabit } from '@/store/habitsStore';
+import { useOnboardingStore } from '@/store/onboarding-store';
+import { useHabitsStore, hasMainHabit } from '@/store/habits-store';
 
 export default function Index() {
   const completed = useOnboardingStore((s) => s.completed);

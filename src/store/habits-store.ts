@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
-import { todayKey } from '@/utils/dateHelpers';
+import { persist } from 'zustand/middleware';
+import { todayKey } from '@/utils/date-helpers';
+import { createSafeJsonStorage } from './persist-storage';
 import {
   CHILLA_LENGTH,
   type CheckIn,
@@ -125,7 +125,7 @@ export const useHabitsStore = create<HabitsState>()(
     }),
     {
       name: 'qirqkun.habits.v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createSafeJsonStorage<Pick<HabitsState, 'habits'>>('habits'),
       version: 1,
     },
   ),

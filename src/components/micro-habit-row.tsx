@@ -4,7 +4,7 @@ import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { haptic } from '@/utils/haptics';
 import type { Habit } from '@/store/types';
-import { isDoneToday } from '@/services/streakCalculator';
+import { isDoneToday } from '@/services/streak-calculator';
 
 type Props = {
   habit: Habit;
@@ -12,7 +12,11 @@ type Props = {
   onOpen: (id: string) => void;
 };
 
-export function MicroHabitRow({ habit, onToggle, onOpen }: Props) {
+export const MicroHabitRow = React.memo(function MicroHabitRow({
+  habit,
+  onToggle,
+  onOpen,
+}: Props) {
   const theme = useTheme();
   const done = isDoneToday(habit);
   const { t } = useTranslation();
@@ -66,7 +70,7 @@ export function MicroHabitRow({ habit, onToggle, onOpen }: Props) {
       </Pressable>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   row: {

@@ -1,4 +1,4 @@
-import { pickQuoteForDay, quotes } from '@/data/motivationalQuotes';
+import { pickQuoteForDay, quotes } from '@/data/motivational-quotes';
 
 describe('motivationalQuotes', () => {
   it('has at least 30 quotes', () => {
@@ -9,6 +9,13 @@ describe('motivationalQuotes', () => {
     for (const q of quotes) {
       expect(typeof q.text).toBe('string');
       expect(q.text.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every quote has a source link', () => {
+    for (const q of quotes) {
+      expect(q.sourceTitle.length).toBeGreaterThan(0);
+      expect(q.sourceUrl).toMatch(/^https:\/\//);
     }
   });
 

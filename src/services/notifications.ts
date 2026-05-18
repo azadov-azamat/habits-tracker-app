@@ -2,7 +2,8 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import i18n from '@/i18n';
 import type { Habit } from '@/store/types';
-import { dayNumber, parseTime } from '@/utils/dateHelpers';
+import { dayNumber, parseTime } from '@/utils/date-helpers';
+import { reportRecoverableError, toActionResult, type ActionResult } from '@/utils/recoverable-error';
 
 const HABIT_CATEGORY = 'HABIT_REMINDER';
 const CHANNEL_ID = 'habit-reminders';
@@ -42,24 +43,47 @@ export async function ensureNotificationSetup(): Promise<void> {
 }
 
 export async function requestPermissions(): Promise<boolean> {
-  const settings = await Notifications.getPermissionsAsync();
-  if (settings.granted) return true;
-  const req = await Notifications.requestPermissionsAsync({
-    ios: {
-      allowAlert: true,
-      allowBadge: true,
-      allowSound: true,
-    },
-  });
-  return req.granted;
+  try {
+    const settings = await Notifications.getPermissionsAsync();
+    if (settings.granted) return true;
+    const req = await Notifications.requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+      },
+    });
+    return req.granted;
+  } catch (error) {
+    reportRecoverableError({
+      kind: 'notification',
+      messageKey: 'errors.notifications',
+      retryLabelKey: 'common.tryAgain',
+      source: 'notifications.requestPermissions',
+      error,
+    });
+    return false;
+  }
 }
 
 export async function cancelIds(ids: string[]): Promise<void> {
   await Promise.all(
-    ids.map((id) =>
-      Notifications.cancelScheduledNotificationAsync(id).catch(() => undefined),
-    ),
+    ids.map((id) => cancelOne(id)),
   );
+}
+
+async function cancelOne(id: string): Promise<void> {
+  try {
+    await Notifications.cancelScheduledNotificationAsync(id);
+  } catch (error) {
+    reportRecoverableError({
+      kind: 'notification',
+      messageKey: 'errors.notifications',
+      retryLabelKey: 'common.tryAgain',
+      source: 'notifications.cancelOne',
+      error,
+    });
+  }
 }
 
 export async function scheduleDailyReminder(habit: Habit): Promise<string> {
@@ -145,4 +169,47 @@ export async function scheduleMorningGreeting(time: string): Promise<string> {
 
 export async function cancelAllNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
+}
+
+export function safeEnsureNotificationSetup(): Promise<ActionResult<void>> {
+  return toActionResult('notifications.ensureSetup', ensureNotificationSetup, {
+    kind: 'notification',
+    messageKey: 'errors.notifications',
+    retryLabelKey: 'common.tryAgain',
+  });
+}
+
+export function safeRescheduleHabit(habit: Habit): Promise<ActionResult<string[]>> {
+  return toActionResult(
+    'notifications.rescheduleHabit',
+    () => rescheduleHabit(habit),
+    {
+      kind: 'notification',
+      messageKey: 'errors.notifications',
+      retryLabelKey: 'common.tryAgain',
+    },
+  );
+}
+
+export function safeScheduleSnoozeChain(
+  habit: Habit,
+  startInMinutes: number,
+): Promise<ActionResult<string[]>> {
+  return toActionResult(
+    'notifications.scheduleSnoozeChain',
+    () => scheduleSnoozeChain(habit, startInMinutes),
+    {
+      kind: 'notification',
+      messageKey: 'errors.notifications',
+      retryLabelKey: 'common.tryAgain',
+    },
+  );
+}
+
+export function safeCancelAllNotifications(): Promise<ActionResult<void>> {
+  return toActionResult('notifications.cancelAll', cancelAllNotifications, {
+    kind: 'notification',
+    messageKey: 'errors.notifications',
+    retryLabelKey: 'common.tryAgain',
+  });
 }

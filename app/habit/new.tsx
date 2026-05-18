@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { canAddMicroHabit, useHabitsStore } from '@/store/habitsStore';
-import { emojiOptions } from '@/data/identityExamples';
-import { IntervalChips, TimePicker } from '@/components/TimeIntervalPicker';
-import { ensureNotificationSetup, rescheduleHabit } from '@/services/notifications';
+import { canAddMicroHabit, useHabitsStore } from '@/store/habits-store';
+import { emojiOptions } from '@/data/identity-examples';
+import { AppErrorBanner } from '@/components/app-error-banner';
+import { IntervalChips, TimePicker } from '@/components/time-interval-picker';
+import { safeEnsureNotificationSetup, safeRescheduleHabit } from '@/services/notifications';
+import { reportRecoverableError } from '@/utils/recoverable-error';
+
+const SNOOZE_INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
+const MAX_SNOOZE_OPTIONS = [1, 2, 3, 4, 5];
 
 export default function NewHabit() {
   const theme = useTheme();
@@ -23,6 +28,7 @@ export default function NewHabit() {
   const [interval, setInterval] = useState(15);
   const [maxSnoozes, setMax] = useState(2);
   const [submitting, setSubmitting] = useState(false);
+  const updateEmoji = useCallback((value: string) => setEmoji(value), []);
 
   async function save() {
     if (!name.trim() || submitting) return;
@@ -41,14 +47,20 @@ export default function NewHabit() {
         snoozeIntervalMin: interval,
         maxSnoozes,
       });
-      try {
-        await ensureNotificationSetup();
-        const ids = await rescheduleHabit(habit);
-        attachIds(habit.id, ids);
-      } catch {
-        // notifications optional
+      await safeEnsureNotificationSetup();
+      const scheduled = await safeRescheduleHabit(habit);
+      if (scheduled.ok) {
+        attachIds(habit.id, scheduled.value);
       }
       router.back();
+    } catch (error) {
+      reportRecoverableError({
+        kind: 'habit-action',
+        messageKey: 'errors.habitAction',
+        retryLabelKey: 'common.tryAgain',
+        source: 'newHabit.save',
+        error,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -90,7 +102,7 @@ export default function NewHabit() {
             {emojiOptions.map((e) => (
               <Pressable
                 key={e}
-                onPress={() => setEmoji(e)}
+                onPress={() => updateEmoji(e)}
                 style={[
                   styles.emojiChip,
                   {
@@ -116,7 +128,7 @@ export default function NewHabit() {
         <IntervalChips
           label={t('onboarding.schedule.intervalLabel')}
           value={interval}
-          options={[5, 10, 15, 30, 60]}
+          options={SNOOZE_INTERVAL_OPTIONS}
           unit={t('common.minutes')}
           onChange={setInterval}
         />
@@ -124,7 +136,7 @@ export default function NewHabit() {
         <IntervalChips
           label={t('onboarding.schedule.maxSnoozesLabel')}
           value={maxSnoozes}
-          options={[1, 2, 3, 4, 5]}
+          options={MAX_SNOOZE_OPTIONS}
           onChange={setMax}
         />
 
@@ -139,6 +151,7 @@ export default function NewHabit() {
           {t('common.save')}
         </Button>
       </ScrollView>
+      <AppErrorBanner />
     </SafeAreaView>
   );
 }

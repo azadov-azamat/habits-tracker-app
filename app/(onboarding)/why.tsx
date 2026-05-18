@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { useOnboardingStore } from '@/store/onboardingStore';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { useOnboardingStore } from '@/store/onboarding-store';
 
 export default function Why() {
   const router = useRouter();

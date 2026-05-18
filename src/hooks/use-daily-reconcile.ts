@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
-import { useHabitsStore } from '@/store/habitsStore';
+import { useHabitsStore } from '@/store/habits-store';
 import { setHapticsEnabled } from '@/utils/haptics';
-import { useSettingsStore } from '@/store/settingsStore';
+import { useSettingsStore } from '@/store/settings-store';
+import { reportRecoverableError } from '@/utils/recoverable-error';
 
 export function useDailyReconcile() {
   const lastState = useRef<AppStateStatus>(AppState.currentState);
@@ -15,9 +16,16 @@ export function useDailyReconcile() {
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
       if (lastState.current.match(/inactive|background/) && state === 'active') {
-        const habits = useHabitsStore.getState().habits;
-        for (const _h of habits) {
-          // future hook: reconcile pending snoozes vs check-in state
+        try {
+          void useHabitsStore.getState().habits.length;
+        } catch (error) {
+          reportRecoverableError({
+            kind: 'startup',
+            messageKey: 'errors.startup',
+            retryLabelKey: 'common.tryAgain',
+            source: 'dailyReconcile.appState',
+            error,
+          });
         }
       }
       lastState.current = state;

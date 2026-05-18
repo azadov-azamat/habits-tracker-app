@@ -1,6 +1,6 @@
-import { computeStreakStats, isDoneToday } from '@/services/streakCalculator';
+import { computeStreakStats, isDoneToday } from '@/services/streak-calculator';
 import type { Habit } from '@/store/types';
-import { addDaysKey, todayKey } from '@/utils/dateHelpers';
+import { addDaysKey, todayKey } from '@/utils/date-helpers';
 
 function makeHabit(overrides: Partial<Habit> = {}): Habit {
   return {

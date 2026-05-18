@@ -3,7 +3,7 @@ import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
-import type { MilestoneDay } from '@/services/milestoneDetector';
+import type { MilestoneDay } from '@/services/milestone-detector';
 
 type Props = {
   visible: boolean;

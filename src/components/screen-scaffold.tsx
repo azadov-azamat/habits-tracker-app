@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppErrorBanner } from '@/components/app-error-banner';
 
 type Props = {
   children: React.ReactNode;
@@ -19,7 +20,7 @@ export function ScreenScaffold({
   bottomInset = true,
 }: Props) {
   const theme = useTheme();
-  const edges: Array<'top' | 'bottom' | 'left' | 'right'> = ['left', 'right'];
+  const edges: ('top' | 'bottom' | 'left' | 'right')[] = ['left', 'right'];
   if (topInset) edges.push('top');
   if (bottomInset) edges.push('bottom');
 
@@ -41,6 +42,7 @@ export function ScreenScaffold({
       style={[styles.flex, { backgroundColor: theme.colors.background }]}
     >
       {body}
+      <AppErrorBanner />
     </SafeAreaView>
   );
 }

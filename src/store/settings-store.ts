@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
+import { createSafeJsonStorage } from './persist-storage';
 import type { AppSettings, ThemeMode } from './types';
 
 type SettingsState = AppSettings & {
@@ -28,7 +28,7 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'qirqkun.settings.v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createSafeJsonStorage<AppSettings>('settings'),
       version: 1,
     },
   ),

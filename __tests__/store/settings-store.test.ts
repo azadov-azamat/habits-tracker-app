@@ -1,4 +1,4 @@
-import { useSettingsStore } from '@/store/settingsStore';
+import { useSettingsStore } from '@/store/settings-store';
 
 beforeEach(() => {
   useSettingsStore.setState({

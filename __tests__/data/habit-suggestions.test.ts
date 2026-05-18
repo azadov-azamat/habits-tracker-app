@@ -1,5 +1,5 @@
-import { habitSuggestions } from '@/data/habitSuggestions';
-import { emojiOptions, identityExamples } from '@/data/identityExamples';
+import { habitSuggestions } from '@/data/habit-suggestions';
+import { emojiOptions, identityExamples } from '@/data/identity-examples';
 
 describe('habitSuggestions', () => {
   it('has at least 8 entries', () => {

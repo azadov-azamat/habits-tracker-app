@@ -1,4 +1,4 @@
-import { useOnboardingStore } from '@/store/onboardingStore';
+import { useOnboardingStore } from '@/store/onboarding-store';
 
 beforeEach(() => {
   useOnboardingStore.setState({

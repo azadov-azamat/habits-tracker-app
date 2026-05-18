@@ -7,10 +7,10 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
-import { useAppTheme } from '@/hooks/useAppTheme';
-import { useNotificationHandler } from '@/hooks/useNotificationHandler';
-import { useDailyReconcile } from '@/hooks/useDailyReconcile';
-import { ensureNotificationSetup } from '@/services/notifications';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useNotificationHandler } from '@/hooks/use-notification-handler';
+import { useDailyReconcile } from '@/hooks/use-daily-reconcile';
+import { safeEnsureNotificationSetup } from '@/services/notifications';
 
 void SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -21,13 +21,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     void (async () => {
-      try {
-        await ensureNotificationSetup();
-      } catch {
-        // notification setup not critical to launch
-      } finally {
-        await SplashScreen.hideAsync().catch(() => {});
-      }
+      await safeEnsureNotificationSetup();
+      await SplashScreen.hideAsync().catch(() => {});
     })();
   }, []);
 

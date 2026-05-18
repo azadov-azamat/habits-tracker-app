@@ -3,14 +3,15 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { useOnboardingStore } from '@/store/onboardingStore';
-import { useHabitsStore } from '@/store/habitsStore';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { useOnboardingStore } from '@/store/onboarding-store';
+import { useHabitsStore } from '@/store/habits-store';
 import {
-  ensureNotificationSetup,
-  rescheduleHabit,
   requestPermissions,
+  safeEnsureNotificationSetup,
+  safeRescheduleHabit,
 } from '@/services/notifications';
+import { reportRecoverableError } from '@/utils/recoverable-error';
 
 export default function Permissions() {
   const router = useRouter();
@@ -42,13 +43,23 @@ export default function Permissions() {
       });
 
       if (withNotifications) {
-        await ensureNotificationSetup();
-        const ids = await rescheduleHabit(habit);
-        attachIds(habit.id, ids);
+        await safeEnsureNotificationSetup();
+        const scheduled = await safeRescheduleHabit(habit);
+        if (scheduled.ok) {
+          attachIds(habit.id, scheduled.value);
+        }
       }
 
       markCompleted();
       router.replace('/(tabs)');
+    } catch (error) {
+      reportRecoverableError({
+        kind: 'habit-action',
+        messageKey: 'errors.habitAction',
+        retryLabelKey: 'common.tryAgain',
+        source: 'permissions.finalize',
+        error,
+      });
     } finally {
       setSubmitting(false);
     }

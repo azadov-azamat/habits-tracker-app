@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
+import { createSafeJsonStorage } from './persist-storage';
 
 type OnboardingDraft = {
   identity?: string;
@@ -42,7 +42,9 @@ export const useOnboardingStore = create<OnboardingState>()(
     }),
     {
       name: 'qirqkun.onboarding.v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createSafeJsonStorage<Pick<OnboardingState, 'completed' | 'draft'>>(
+        'onboarding',
+      ),
       version: 1,
     },
   ),

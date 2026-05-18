@@ -6,11 +6,14 @@ import {
   ensureNotificationSetup,
   requestPermissions,
   rescheduleHabit,
+  safeRescheduleHabit,
+  safeScheduleSnoozeChain,
   scheduleDailyReminder,
   scheduleSnoozeChain,
 } from '@/services/notifications';
+import { useAppErrorStore } from '@/store/app-error-store';
 import type { Habit } from '@/store/types';
-import { todayKey } from '@/utils/dateHelpers';
+import { todayKey } from '@/utils/date-helpers';
 
 type ScheduledMap = Map<string, Parameters<typeof Notifications.scheduleNotificationAsync>[0]>;
 const scheduled = (Notifications as unknown as { __scheduled: ScheduledMap }).__scheduled;
@@ -41,7 +44,13 @@ function habit(over: Partial<Habit> = {}): Habit {
 
 beforeEach(() => {
   scheduled.clear();
+  useAppErrorStore.getState().clearAppError();
   jest.clearAllMocks();
+  jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe('notifications service', () => {
@@ -76,6 +85,12 @@ describe('notifications service', () => {
       (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValueOnce({ granted: false });
       (Notifications.requestPermissionsAsync as jest.Mock).mockResolvedValueOnce({ granted: false });
       expect(await requestPermissions()).toBe(false);
+    });
+
+    it('returns false and reports when permission lookup fails', async () => {
+      (Notifications.getPermissionsAsync as jest.Mock).mockRejectedValueOnce(new Error('no api'));
+      expect(await requestPermissions()).toBe(false);
+      expect(useAppErrorStore.getState().currentError?.kind).toBe('notification');
     });
   });
 
@@ -140,6 +155,18 @@ describe('notifications service', () => {
     it('does not throw on unknown ids', async () => {
       await expect(cancelIds(['nope_1', 'nope_2'])).resolves.toBeUndefined();
     });
+
+    it('continues cancelling remaining ids when one cancel fails', async () => {
+      const ids = await scheduleSnoozeChain(habit({ maxSnoozes: 2 }), 5);
+      (Notifications.cancelScheduledNotificationAsync as jest.Mock)
+        .mockRejectedValueOnce(new Error('first failed'))
+        .mockResolvedValueOnce(undefined);
+
+      await expect(cancelIds(ids)).resolves.toBeUndefined();
+
+      expect(Notifications.cancelScheduledNotificationAsync).toHaveBeenCalledTimes(2);
+      expect(useAppErrorStore.getState().currentError?.kind).toBe('notification');
+    });
   });
 
   describe('rescheduleHabit', () => {
@@ -150,6 +177,40 @@ describe('notifications service', () => {
       expect(newIds).toHaveLength(1);
       expect(scheduled.has(stale)).toBe(false);
       expect(scheduled.has(newIds[0]!)).toBe(true);
+    });
+
+    it('safeRescheduleHabit reports scheduling failure without throwing', async () => {
+      (Notifications.scheduleNotificationAsync as jest.Mock).mockRejectedValueOnce(
+        new Error('schedule failed'),
+      );
+
+      const result = await safeRescheduleHabit(habit());
+
+      expect(result.ok).toBe(false);
+      expect(useAppErrorStore.getState().currentError?.kind).toBe('notification');
+    });
+  });
+
+  describe('safeScheduleSnoozeChain', () => {
+    it('returns ids when scheduling succeeds', async () => {
+      const result = await safeScheduleSnoozeChain(habit({ maxSnoozes: 2 }), 5);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toHaveLength(2);
+      }
+    });
+
+    it('reports scheduling failure without invalid ids', async () => {
+      (Notifications.scheduleNotificationAsync as jest.Mock).mockRejectedValueOnce(
+        new Error('schedule failed'),
+      );
+
+      const result = await safeScheduleSnoozeChain(habit({ maxSnoozes: 2 }), 5);
+
+      expect(result.ok).toBe(false);
+      expect(useAppErrorStore.getState().currentError?.messageKey).toBe(
+        'errors.notifications',
+      );
     });
   });
 

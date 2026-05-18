@@ -1,6 +1,6 @@
-import { getUnseenMilestone, isChillaComplete, MILESTONE_DAYS } from '@/services/milestoneDetector';
+import { getUnseenMilestone, isChillaComplete, MILESTONE_DAYS } from '@/services/milestone-detector';
 import type { Habit } from '@/store/types';
-import { addDaysKey, todayKey } from '@/utils/dateHelpers';
+import { addDaysKey, todayKey } from '@/utils/date-helpers';
 
 function habitWithDone(daysAgo: number, doneCount: number, celebrated: number[] = []): Habit {
   const start = addDaysKey(todayKey(), -daysAgo);

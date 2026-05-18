@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput, useTheme } from 'react-native-paper';
 
@@ -8,7 +8,7 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-export function TimePicker({ label, value, onChange }: Props) {
+export const TimePicker = React.memo(function TimePicker({ label, value, onChange }: Props) {
   const theme = useTheme();
   const [hour, minute] = value.split(':');
 
@@ -49,7 +49,7 @@ export function TimePicker({ label, value, onChange }: Props) {
       </View>
     </View>
   );
-}
+});
 
 type IntervalProps = {
   label: string;
@@ -59,7 +59,13 @@ type IntervalProps = {
   unit?: string;
 };
 
-export function IntervalChips({ label, value, options, onChange, unit }: IntervalProps) {
+export const IntervalChips = React.memo(function IntervalChips({
+  label,
+  value,
+  options,
+  onChange,
+  unit,
+}: IntervalProps) {
   const theme = useTheme();
   return (
     <View style={styles.wrap}>
@@ -94,7 +100,7 @@ export function IntervalChips({ label, value, options, onChange, unit }: Interva
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   wrap: { gap: 8 },

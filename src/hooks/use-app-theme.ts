@@ -1,6 +1,6 @@
 import { useColorScheme } from 'react-native';
-import { useSettingsStore } from '@/store/settingsStore';
-import { darkTheme, lightTheme } from '@/theme/paperTheme';
+import { useSettingsStore } from '@/store/settings-store';
+import { darkTheme, lightTheme } from '@/theme/paper-theme';
 
 export function useAppTheme() {
   const themeMode = useSettingsStore((s) => s.theme);

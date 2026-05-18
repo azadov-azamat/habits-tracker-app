@@ -3,12 +3,12 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { Card, Divider, List, SegmentedButtons, Switch, Text, useTheme } from 'react-native-paper';
 import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useHabitsStore } from '@/store/habitsStore';
-import { useOnboardingStore } from '@/store/onboardingStore';
-import { cancelAllNotifications } from '@/services/notifications';
-import { TimePicker } from '@/components/TimeIntervalPicker';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { useSettingsStore } from '@/store/settings-store';
+import { useHabitsStore } from '@/store/habits-store';
+import { useOnboardingStore } from '@/store/onboarding-store';
+import { safeCancelAllNotifications } from '@/services/notifications';
+import { TimePicker } from '@/components/time-interval-picker';
 
 export default function SettingsTab() {
   const theme = useTheme();
@@ -28,7 +28,7 @@ export default function SettingsTab() {
           text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
-            await cancelAllNotifications();
+            await safeCancelAllNotifications();
             habitsClear();
             onboardingReset();
           },

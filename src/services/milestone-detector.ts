@@ -1,4 +1,4 @@
-import { dayNumber } from '@/utils/dateHelpers';
+import { dayNumber } from '@/utils/date-helpers';
 import type { Habit } from '@/store/types';
 
 export const MILESTONE_DAYS = [1, 7, 14, 21, 30, 40] as const;

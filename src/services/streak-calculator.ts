@@ -1,4 +1,4 @@
-import { addDaysKey, dayNumber, todayKey, toDateKey, fromDateKey } from '@/utils/dateHelpers';
+import { addDaysKey, dayNumber, todayKey } from '@/utils/date-helpers';
 import type { Habit } from '@/store/types';
 
 export type StreakStats = {
@@ -18,8 +18,6 @@ export function computeStreakStats(habit: Habit): StreakStats {
   let totalDone = 0;
   let longestStreak = 0;
   let runningStreak = 0;
-  let cursor = habit.startDate;
-
   for (let i = 0; i < currentDay; i++) {
     const day = addDaysKey(habit.startDate, i);
     if (day > today) break;
@@ -33,7 +31,6 @@ export function computeStreakStats(habit: Habit): StreakStats {
         runningStreak = 0;
       }
     }
-    cursor = day;
   }
 
   let currentStreak = 0;

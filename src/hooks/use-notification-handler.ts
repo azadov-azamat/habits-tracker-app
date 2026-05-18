@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { useHabitsStore } from '@/store/habitsStore';
-import { cancelIds, scheduleSnoozeChain } from '@/services/notifications';
-import { todayKey } from '@/utils/dateHelpers';
+import { useHabitsStore } from '@/store/habits-store';
+import { cancelIds, safeScheduleSnoozeChain } from '@/services/notifications';
+import { todayKey } from '@/utils/date-helpers';
 
 export function useNotificationHandler() {
   useEffect(() => {
@@ -22,18 +22,22 @@ export function useNotificationHandler() {
         state.checkIn(habitId);
         await cancelIds(habit.scheduledNotificationIds.filter((id) => id !== response.notification.request.identifier));
       } else if (action === 'SNOOZE') {
-        const newIds = await scheduleSnoozeChain(habit, habit.snoozeIntervalMin);
-        state.attachNotificationIds(habitId, [
-          ...habit.scheduledNotificationIds,
-          ...newIds,
-        ]);
-      } else {
-        if (data?.type === 'daily' && !habit.checkIns[todayKey()]?.done) {
-          const newIds = await scheduleSnoozeChain(habit, habit.snoozeIntervalMin);
+        const scheduled = await safeScheduleSnoozeChain(habit, habit.snoozeIntervalMin);
+        if (scheduled.ok) {
           state.attachNotificationIds(habitId, [
             ...habit.scheduledNotificationIds,
-            ...newIds,
+            ...scheduled.value,
           ]);
+        }
+      } else {
+        if (data?.type === 'daily' && !habit.checkIns[todayKey()]?.done) {
+          const scheduled = await safeScheduleSnoozeChain(habit, habit.snoozeIntervalMin);
+          if (scheduled.ok) {
+            state.attachNotificationIds(habitId, [
+              ...habit.scheduledNotificationIds,
+              ...scheduled.value,
+            ]);
+          }
         }
       }
     });
