@@ -33,4 +33,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Build artifacts
+dist/
+
 app-example
