@@ -8,7 +8,13 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "eas:login": "eas login",
+    "eas:init": "eas init",
+    "build:android": "eas build --platform android --profile preview",
+    "build:ios": "eas build --platform ios --profile preview",
+    "build:prod": "eas build --platform all --profile production",
+    "update": "eas update --branch preview"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
@@ -26,6 +32,7 @@
     "expo-splash-screen": "~0.29.0",
     "expo-status-bar": "~2.0.0",
     "expo-system-ui": "~4.0.0",
+    "expo-updates": "^0.26.19",
     "i18next": "^23.16.5",
     "lottie-react-native": "7.1.0",
     "react": "18.3.1",
@@ -47,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~18.3.12",
+    "eas-cli": "^18.13.0",
     "typescript": "^5.3.3"
   },
   "private": true
