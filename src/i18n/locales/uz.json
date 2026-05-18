@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "40 Kun",
+    "tagline": "Chilla — odat shakllantirish"
+  },
+  "common": {
+    "next": "Davom etish",
+    "back": "Orqaga",
+    "skip": "O'tkazib yuborish",
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "delete": "O'chirish",
+    "edit": "Tahrirlash",
+    "done": "Tayyor",
+    "yes": "Ha",
+    "no": "Yo'q",
+    "today": "Bugun",
+    "yesterday": "Kecha",
+    "day": "kun",
+    "days": "kun",
+    "of": "dan",
+    "minutes": "daqiqa",
+    "loading": "Yuklanmoqda...",
+    "error": "Xatolik yuz berdi",
+    "tryAgain": "Qayta urinib ko'ring"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Xush kelibsiz",
+      "headline": "40 kunlik chilla — yangi odat sari",
+      "body": "Tadqiqotlar ko'rsatadiki, doimiy takror bilan ongli odat shakllanadi. Bizning ajdodlarimiz “chilla” — 40 kunlik davrni o'sish va o'zgarish vaqti deb hisoblashgan. Keling, birgalikda bu yo'lni bosib o'tamiz.",
+      "start": "Boshlash"
+    },
+    "identity": {
+      "title": "Kim bo'lib bormoqdasiz?",
+      "subtitle": "Odatlar harakatlar emas — ular siz bo'lmoqchi bo'lgan inson kim ekanligini tasdiqlaydi.",
+      "label": "Men … bo'lib bormoqdaman",
+      "placeholder": "masalan: sog'lom inson",
+      "hint": "Misollar: intizomli, sog'lom, o'qimishli, sabrli, mehribon"
+    },
+    "habit": {
+      "title": "Qaysi odatni shakllantiramiz?",
+      "subtitle": "Aniq va kichik odat tanlang. Katta o'zgarish kichik qadamdan boshlanadi.",
+      "nameLabel": "Odat nomi",
+      "namePlaceholder": "masalan: Har kuni 8 stakan suv ichish",
+      "emojiLabel": "Emoji tanlang",
+      "suggestionsTitle": "Yoki taklif qilingan odatlar:"
+    },
+    "why": {
+      "title": "Nega bu odat siz uchun muhim?",
+      "subtitle": "Qiyin kunlarda bu javob sizga kuch beradi. Yuragingizdan yozing.",
+      "placeholder": "masalan: Sog'lig'im va energiyam uchun..."
+    },
+    "intention": {
+      "title": "Qachon va qanday bajarasiz?",
+      "subtitle": "“Qachon X, shunda Y” formulasi muvaffaqiyatni 2-3 barobar oshiradi.",
+      "whenLabel": "Qachon (qaysi vaqtda yoki qaysi ishdan keyin)",
+      "whenPlaceholder": "masalan: ertalab uyg'onganimda",
+      "thenLabel": "Shunda men … qilaman",
+      "thenPlaceholder": "masalan: 1 stakan suv ichaman",
+      "preview": "Sizning niyatingiz:",
+      "minimalLabel": "Minimal versiya (og'ir kunlar uchun)",
+      "minimalPlaceholder": "masalan: hech bo'lmasa 1 yutum suv",
+      "minimalHint": "Bu — “2 daqiqalik qoida”. Energiyangiz kam bo'lsa ham bajarish mumkin bo'lgan eng kichik versiya."
+    },
+    "schedule": {
+      "title": "Qachon eslatib turay?",
+      "subtitle": "Doimiy vaqt — odat shakllanishining kaliti.",
+      "timeLabel": "Eslatma vaqti",
+      "intervalLabel": "Bajarmasam, har necha daqiqada qayta eslataman?",
+      "maxSnoozesLabel": "Kuniga maksimum eslatmalar soni",
+      "intervalHint": "Eslatma kelganda “Bajardim” desangiz, qayta eslatmalar to'xtaydi."
+    },
+    "permissions": {
+      "title": "Eslatmalarga ruxsat",
+      "subtitle": "Sizga belgilangan vaqtda yumshoq eslatma yuborishimiz uchun ruxsat kerak.",
+      "body": "Bu ruxsatsiz app yarim ishlamaydi — eslatmalar odat shakllanishida asosiy rol o'ynaydi.",
+      "allow": "Ruxsat berish",
+      "later": "Keyinroq",
+      "denied": "Ruxsat berilmadi. Telefon sozlamalaridan yoqishingiz mumkin."
+    }
+  },
+  "home": {
+    "greetingMorning": "Xayrli tong",
+    "greetingDay": "Xayrli kun",
+    "greetingEvening": "Xayrli kech",
+    "dayCounter": "{{day}}-kun / 40",
+    "remainingDays": "{{count}} kun qoldi",
+    "todayQuestion": "Bugungi odatingizni bajardingizmi?",
+    "checkIn": "Bajardim",
+    "alreadyDone": "Bugun bajarildi ✅",
+    "undo": "Bekor qilish",
+    "whyTitle": "Esda tuting — nega?",
+    "intentionTitle": "Sizning niyatingiz",
+    "microHabitsTitle": "Mikro odatlar",
+    "addMicroHabit": "Mikro odat qo'shish",
+    "noteLabel": "Bugungi fikr-mulohaza (ixtiyoriy)",
+    "notePlaceholder": "Bugun qanday his qildingiz?",
+    "minimalCard": {
+      "title": "Bugun og'irmi?",
+      "body": "Mukammal bo'lishi shart emas. Minimal versiyani sina:",
+      "action": "Shu ham hisoblanadi"
+    },
+    "missedCard": {
+      "title": "Bir kunni o'tkazib yubording",
+      "body": "Bu oddiy hol — hech kim mukammal emas. Muhimi, bugun davom etish.",
+      "action": "Bugundan boshlayman"
+    },
+    "twoMissedCard": {
+      "title": "Bir nima qiyinroqmi?",
+      "body": "Ehtimol, vaqt mos kelmayotgandir yoki odat juda katta. Sozlamalarni o'zgartirib ko'ramizmi?",
+      "adjustTime": "Vaqtni o'zgartirish",
+      "useMinimal": "Minimal versiyaga o'tish"
+    }
+  },
+  "progress": {
+    "title": "Yo'l xaritasi",
+    "currentStreak": "Joriy ketma-ketlik",
+    "longestStreak": "Eng uzun ketma-ketlik",
+    "totalDone": "Jami bajarilgan",
+    "completionRate": "Bajarilish foizi",
+    "gridLegend": {
+      "done": "Bajarilgan",
+      "today": "Bugun",
+      "missed": "O'tkazilgan",
+      "upcoming": "Oldinda"
+    },
+    "weeklyReflection": {
+      "title": "Haftalik fikr-mulohaza",
+      "question": "Bu hafta qanday o'tdi? Nimaga yordam berdi, nima qiyin bo'ldi?",
+      "save": "Saqlash"
+    }
+  },
+  "habit": {
+    "details": "Odat tafsilotlari",
+    "since": "Boshlangan",
+    "newMicroHabit": "Yangi mikro odat",
+    "microLimitReached": "Maksimum 2 ta mikro odat qo'shish mumkin",
+    "pause": "Vaqtincha to'xtatish",
+    "resume": "Davom ettirish",
+    "delete": "Odatni o'chirish",
+    "deleteConfirm": "Bu odat va uning tarixi butunlay o'chiriladi. Ishonchingiz komilmi?",
+    "edit": "Tahrirlash"
+  },
+  "milestones": {
+    "day1": {
+      "title": "Birinchi qadam!",
+      "body": "Eng qiyini — boshlash. Siz buni qildingiz. 🌱"
+    },
+    "day7": {
+      "title": "1 hafta!",
+      "body": "Bir hafta — katta yutuq. Miya yangi yo'lakni qura boshladi. 🔥"
+    },
+    "day14": {
+      "title": "2 hafta!",
+      "body": "Yarim oy o'tdi. Endi bu odat sezilarli darajada osonlashayotganini sezasiz. ✨"
+    },
+    "day21": {
+      "title": "3 hafta!",
+      "body": "Klassik 21 kunlik bosqich. Lekin siz to'xtamaysiz — chilla davom etmoqda. 🚀"
+    },
+    "day30": {
+      "title": "30 kun!",
+      "body": "Bir oy! Odat hayotingizning bir qismiga aylanmoqda. Yana 10 kun qoldi. 🎯"
+    },
+    "day40": {
+      "title": "Chilla yakunlandi!",
+      "body": "40 kun — sizda yangi shaxsiy fazilat shakllandi. Siz uddaladingiz! 🏆",
+      "newHabit": "Yangi odat boshlash",
+      "continue": "Davom ettirish"
+    },
+    "continue": "Davom etaman",
+    "share": "Yutuqni ulashish"
+  },
+  "settings": {
+    "title": "Sozlamalar",
+    "appearance": "Ko'rinish",
+    "theme": "Mavzu",
+    "themeSystem": "Tizim",
+    "themeLight": "Yorug'",
+    "themeDark": "Qorong'i",
+    "notifications": "Eslatmalar",
+    "notificationsEnabled": "Eslatmalar yoqilgan",
+    "morningGreeting": "Ertalabki salom",
+    "morningGreetingTime": "Salom vaqti",
+    "haptics": "Tebranish (haptic)",
+    "data": "Ma'lumotlar",
+    "exportData": "Ma'lumotlarni eksport qilish",
+    "clearData": "Hammasini tozalash",
+    "clearDataConfirm": "Barcha odatlar va tarix o'chiriladi. Bu amalni qaytarib bo'lmaydi.",
+    "about": "Ilova haqida",
+    "version": "Versiya"
+  },
+  "notifications": {
+    "channel": {
+      "name": "Odat eslatmalari",
+      "description": "Belgilangan vaqtda odat haqida eslatadi"
+    },
+    "reminder": {
+      "title": "{{emoji}} {{habitName}}",
+      "body": "{{day}}-kun — vaqt keldi! Bugun ham davom etamiz 💪",
+      "actionDone": "Bajardim",
+      "actionSnooze": "Keyinroq"
+    },
+    "snooze": {
+      "title": "{{emoji}} Eslatma",
+      "body": "Hali bajarmadingiz — hozir vaqt bormi?"
+    },
+    "morningGreeting": {
+      "title": "Xayrli tong!",
+      "body": "Bugun chillaning {{day}}-kuni. Yana bir kun — yana bir qadam 🌿"
+    },
+    "milestone": {
+      "title": "🎉 {{day}}-kun!",
+      "body": "Sen ushlab turyapsan. Davom et — mag'lubiyat — bu to'xtab qolish, urush bilan kurashish emas."
+    }
+  },
+  "quotes": {
+    "section": "Bugungi fikr"
+  }
+}

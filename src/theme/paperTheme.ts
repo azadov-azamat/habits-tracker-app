@@ -1,0 +1,62 @@
+import { MD3DarkTheme, MD3LightTheme, type MD3Theme } from 'react-native-paper';
+import { palette } from './colors';
+
+export const lightTheme: MD3Theme = {
+  ...MD3LightTheme,
+  roundness: 4,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: palette.primary,
+    onPrimary: '#FFFFFF',
+    primaryContainer: '#EBE2FF',
+    onPrimaryContainer: '#2A0E73',
+    secondary: palette.secondary,
+    onSecondary: '#FFFFFF',
+    secondaryContainer: '#FFE4CC',
+    onSecondaryContainer: '#4D2A00',
+    tertiary: palette.success,
+    background: palette.cream,
+    onBackground: palette.ink,
+    surface: palette.surfaceLight,
+    onSurface: palette.ink,
+    surfaceVariant: '#F4EFFA',
+    onSurfaceVariant: palette.inkSoft,
+    outline: palette.line,
+    outlineVariant: palette.line,
+    error: palette.danger,
+    elevation: {
+      level0: 'transparent',
+      level1: '#FAF4FF',
+      level2: '#F4EBFF',
+      level3: '#EEE3FF',
+      level4: '#ECDFFF',
+      level5: '#E8D9FF',
+    },
+  },
+};
+
+export const darkTheme: MD3Theme = {
+  ...MD3DarkTheme,
+  roundness: 4,
+  colors: {
+    ...MD3DarkTheme.colors,
+    primary: palette.primaryDark,
+    onPrimary: '#1A0A4A',
+    primaryContainer: '#3D2680',
+    onPrimaryContainer: '#EBE2FF',
+    secondary: palette.secondaryDark,
+    onSecondary: '#3D1F00',
+    secondaryContainer: '#704020',
+    onSecondaryContainer: '#FFE4CC',
+    tertiary: palette.successDark,
+    background: palette.creamDark,
+    onBackground: '#F2EDF8',
+    surface: palette.surfaceDark,
+    onSurface: '#F2EDF8',
+    surfaceVariant: '#332D40',
+    onSurfaceVariant: '#C9C2D9',
+    outline: palette.lineDark,
+    outlineVariant: palette.lineDark,
+    error: '#F08989',
+  },
+};
