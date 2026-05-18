@@ -1,0 +1,19 @@
+schema: spec-driven
+
+context: |
+  40 Kun is an offline-first Uzbek habit tracker built with Expo SDK 52,
+  React Native, TypeScript, expo-router, react-native-paper, zustand, and
+  AsyncStorage. Keep changes consistent with the existing app structure:
+  app/ contains expo-router screens, src/components contains reusable UI,
+  src/store contains zustand stores, src/services contains app logic, and
+  src/i18n/locales/uz.json is the source for user-facing Uzbek copy.
+
+rules:
+  proposal:
+    - Keep scope focused on the requested app behavior.
+    - Include offline behavior when the change touches user workflows.
+  design:
+    - Prefer existing stores, services, components, and theme primitives.
+    - Avoid introducing network dependencies for core habit flows.
+  tasks:
+    - Include typecheck and relevant Jest coverage for risky logic changes.
