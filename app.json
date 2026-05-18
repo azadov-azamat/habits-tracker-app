@@ -2,6 +2,7 @@
   "expo": {
     "name": "40 Kun",
     "slug": "habits-tracker-app",
+    "owner": "azamat_azadov",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "qirqkun",
