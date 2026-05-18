@@ -8,7 +8,9 @@
     "scheme": "qirqkun",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -19,12 +21,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "uz.qirqkun.app",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification"]
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
       }
     },
     "android": {
-      "package": "uz.qirqkun.app",
-      "edgeToEdgeEnabled": true
+      "package": "uz.qirqkun.app"
     },
     "web": {
       "bundler": "metro",
@@ -45,8 +49,11 @@
       "typedRoutes": true
     },
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
-        "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
+        "projectId": "e807c313-970d-48c7-bf67-656e6379b732"
       }
     }
   }
