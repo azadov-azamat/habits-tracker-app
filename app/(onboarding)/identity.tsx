@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { identityExamples } from '@/data/identityExamples';
-import { useOnboardingStore } from '@/store/onboardingStore';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { identityExamples } from '@/data/identity-examples';
+import { useOnboardingStore } from '@/store/onboarding-store';
 
 export default function Identity() {
   const router = useRouter();
@@ -15,6 +15,10 @@ export default function Identity() {
   const setDraft = useOnboardingStore((s) => s.setDraft);
   const value = draft.identity ?? '';
   const canContinue = value.trim().length >= 2;
+  const updateIdentity = useCallback(
+    (identity: string) => setDraft({ identity }),
+    [setDraft],
+  );
 
   return (
     <ScreenScaffold>
@@ -35,14 +39,14 @@ export default function Identity() {
           variant="headlineSmall"
           style={[styles.preview, { color: theme.colors.primary, fontWeight: '800' }]}
         >
-          Men {value || '___'} bo‘lib bormoqdaman
+          Men {value || '___'} bo‘lib boraman
         </Text>
       </View>
 
       <TextInput
         mode="outlined"
         value={value}
-        onChangeText={(v) => setDraft({ identity: v })}
+        onChangeText={updateIdentity}
         placeholder={t('onboarding.identity.placeholder')}
         autoCapitalize="none"
       />
@@ -51,7 +55,7 @@ export default function Identity() {
         {identityExamples.map((ex) => (
           <Pressable
             key={ex}
-            onPress={() => setDraft({ identity: ex })}
+            onPress={() => updateIdentity(ex)}
             style={[
               styles.chip,
               {

@@ -2,6 +2,7 @@ import {
   addDaysKey,
   dayNumber,
   daysSince,
+  formatDateUz,
   formatTimeHHMM,
   fromDateKey,
   isPastKey,
@@ -11,7 +12,7 @@ import {
   toDateKey,
   todayKey,
   yesterdayKey,
-} from '@/utils/dateHelpers';
+} from '@/utils/date-helpers';
 
 describe('dateHelpers', () => {
   describe('toDateKey / fromDateKey', () => {
@@ -97,8 +98,24 @@ describe('dateHelpers', () => {
   });
 
   describe('partOfDay', () => {
-    it('returns one of three buckets', () => {
-      expect(['morning', 'day', 'evening']).toContain(partOfDay());
+    it('returns one of four buckets for current time', () => {
+      expect(['morning', 'day', 'evening', 'night']).toContain(partOfDay());
+    });
+
+    it.each([
+      [5, 'morning'],
+      [11, 'morning'],
+      [12, 'day'],
+      [17, 'day'],
+      [18, 'evening'],
+      [21, 'evening'],
+      [22, 'night'],
+      [4, 'night'],
+      [0, 'night'],
+    ])('hour %i → %s', (hour, expected) => {
+      const d = new Date();
+      d.setHours(hour, 0, 0, 0);
+      expect(partOfDay(d)).toBe(expected);
     });
   });
 
@@ -116,6 +133,12 @@ describe('dateHelpers', () => {
 
     it('zero-pads single digits', () => {
       expect(formatTimeHHMM(5, 3)).toBe('05:03');
+    });
+  });
+
+  describe('formatDateUz', () => {
+    it('formats month names in Uzbek', () => {
+      expect(formatDateUz('2026-05-18')).toBe('18 may 2026');
     });
   });
 });

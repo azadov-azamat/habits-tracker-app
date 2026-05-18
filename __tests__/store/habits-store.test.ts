@@ -5,9 +5,9 @@ import {
   selectMainHabit,
   selectMicroHabits,
   useHabitsStore,
-} from '@/store/habitsStore';
+} from '@/store/habits-store';
 import { MAX_MICRO_HABITS, type CreateHabitInput } from '@/store/types';
-import { todayKey, yesterdayKey } from '@/utils/dateHelpers';
+import { todayKey, yesterdayKey } from '@/utils/date-helpers';
 
 function baseInput(over: Partial<CreateHabitInput> = {}): CreateHabitInput {
   return {
@@ -18,7 +18,7 @@ function baseInput(over: Partial<CreateHabitInput> = {}): CreateHabitInput {
     identity: 'sog‘lom inson',
     intentionWhen: 'ertalab',
     intentionThen: '1 stakan suv',
-    minimalVersion: '1 yutum',
+    minimalVersion: '1 qultum',
     reminderTime: '08:00',
     snoozeIntervalMin: 15,
     maxSnoozes: 3,

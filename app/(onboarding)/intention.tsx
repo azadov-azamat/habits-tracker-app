@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { useOnboardingStore } from '@/store/onboardingStore';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { useOnboardingStore } from '@/store/onboarding-store';
+import { formatActionForPreview } from '@/utils/format-action-for-preview';
 
 export default function Intention() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function Intention() {
   const when = draft.intentionWhen ?? '';
   const then = draft.intentionThen ?? draft.name ?? '';
   const minimal = draft.minimalVersion ?? '';
+  const previewAction = formatActionForPreview(then);
   const canContinue = when.trim().length > 0 && then.trim().length > 0 && minimal.trim().length > 0;
 
   return (
@@ -33,8 +35,8 @@ export default function Intention() {
           {t('onboarding.intention.preview').toUpperCase()}
         </Text>
         <Text variant="titleMedium" style={{ color: theme.colors.onSurface, lineHeight: 24 }}>
-          Qachon <Text style={{ fontWeight: '700' }}>{when || '___'}</Text>, shunda men{' '}
-          <Text style={{ fontWeight: '700' }}>{then || '___'}</Text>.
+          Agar <Text style={{ fontWeight: '700' }}>{when || '___'}</Text>, men{' '}
+          <Text style={{ fontWeight: '700' }}>{previewAction}</Text>.
         </Text>
       </View>
 

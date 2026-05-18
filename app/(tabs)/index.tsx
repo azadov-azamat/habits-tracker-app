@@ -1,29 +1,43 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { AppState, StyleSheet, View } from 'react-native';
 import { Button, IconButton, Text, useTheme } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { FortyDayGrid } from '@/components/FortyDayGrid';
-import { CheckInButton } from '@/components/CheckInButton';
-import { StreakBadge } from '@/components/StreakBadge';
-import { WhyReminderCard } from '@/components/WhyReminderCard';
-import { MotivationCard } from '@/components/MotivationCard';
-import { MinimumViableCard } from '@/components/MinimumViableCard';
-import { RecoveryCard } from '@/components/RecoveryCard';
-import { MicroHabitRow } from '@/components/MicroHabitRow';
-import { MilestoneModal } from '@/components/MilestoneModal';
-import { EmptyState } from '@/components/EmptyState';
+import { useShallow } from 'zustand/react/shallow';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { FortyDayGrid } from '@/components/forty-day-grid';
+import { CheckInButton } from '@/components/check-in-button';
+import { StreakBadge } from '@/components/streak-badge';
+import { WhyReminderCard } from '@/components/why-reminder-card';
+import { MotivationCard } from '@/components/motivation-card';
+import { MinimumViableCard } from '@/components/minimum-viable-card';
+import { RecoveryCard } from '@/components/recovery-card';
+import { MicroHabitRow } from '@/components/micro-habit-row';
+import { MilestoneModal } from '@/components/milestone-modal';
+import { EmptyState } from '@/components/empty-state';
 import {
   canAddMicroHabit,
   selectMainHabit,
   selectMicroHabits,
   useHabitsStore,
-} from '@/store/habitsStore';
-import { computeStreakStats, isDoneToday } from '@/services/streakCalculator';
-import { getUnseenMilestone } from '@/services/milestoneDetector';
-import { partOfDay } from '@/utils/dateHelpers';
+} from '@/store/habits-store';
+import { computeStreakStats, isDoneToday } from '@/services/streak-calculator';
+import { getUnseenMilestone } from '@/services/milestone-detector';
+import { partOfDay } from '@/utils/date-helpers';
 import { cancelIds } from '@/services/notifications';
+
+function greetingKeyFor(period: ReturnType<typeof partOfDay>): string {
+  switch (period) {
+    case 'morning':
+      return 'home.greetingMorning';
+    case 'evening':
+      return 'home.greetingEvening';
+    case 'night':
+      return 'home.greetingNight';
+    default:
+      return 'home.greetingDay';
+  }
+}
 
 export default function HomeTab() {
   const theme = useTheme();
@@ -31,7 +45,7 @@ export default function HomeTab() {
   const { t } = useTranslation();
 
   const mainHabit = useHabitsStore(selectMainHabit);
-  const microHabits = useHabitsStore(selectMicroHabits);
+  const microHabits = useHabitsStore(useShallow(selectMicroHabits));
   const canAddMicro = useHabitsStore(canAddMicroHabit);
   const checkIn = useHabitsStore((s) => s.checkIn);
   const undoCheckIn = useHabitsStore((s) => s.undoCheckIn);
@@ -43,6 +57,23 @@ export default function HomeTab() {
   );
   const done = !!mainHabit && isDoneToday(mainHabit);
 
+  const [greetingKey, setGreetingKey] = useState(() => greetingKeyFor(partOfDay()));
+
+  useFocusEffect(
+    useCallback(() => {
+      setGreetingKey(greetingKeyFor(partOfDay()));
+    }, []),
+  );
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        setGreetingKey(greetingKeyFor(partOfDay()));
+      }
+    });
+    return () => sub.remove();
+  }, []);
+
   const [milestoneDay, setMilestoneDay] = useState<number | null>(null);
 
   useEffect(() => {
@@ -51,35 +82,48 @@ export default function HomeTab() {
     if (m) setMilestoneDay(m);
   }, [mainHabit]);
 
+  const handleCheckIn = useCallback(async () => {
+    if (!mainHabit) return;
+    checkIn(mainHabit.id);
+    await cancelIds(mainHabit.scheduledNotificationIds.slice(1));
+  }, [checkIn, mainHabit]);
+
+  const handleUndo = useCallback(() => {
+    if (!mainHabit) return;
+    undoCheckIn(mainHabit.id);
+  }, [mainHabit, undoCheckIn]);
+
+  const handleMicroToggle = useCallback(
+    (id: string) => {
+      const habit = useHabitsStore.getState().habits.find((h) => h.id === id);
+      if (!habit) return;
+      if (isDoneToday(habit)) {
+        undoCheckIn(id);
+      } else {
+        checkIn(id);
+      }
+    },
+    [checkIn, undoCheckIn],
+  );
+
+  const handleMicroOpen = useCallback(
+    (id: string) => {
+      router.push(`/habit/${id}`);
+    },
+    [router],
+  );
+
   if (!mainHabit || !stats) {
     return (
       <ScreenScaffold>
         <EmptyState
-          title="Asosiy odat topilmadi"
-          body="Yangi 40 kunlik chillani boshlash uchun ro‘yxatdan o‘ting."
-          actionLabel="Boshlash"
+          title={t('home.emptyTitle')}
+          body={t('home.emptyBody')}
+          actionLabel={t('onboarding.welcome.start')}
           onAction={() => router.replace('/(onboarding)/welcome')}
         />
       </ScreenScaffold>
     );
-  }
-
-  const greetingKey =
-    partOfDay() === 'morning'
-      ? 'home.greetingMorning'
-      : partOfDay() === 'evening'
-        ? 'home.greetingEvening'
-        : 'home.greetingDay';
-
-  async function handleCheckIn() {
-    if (!mainHabit) return;
-    checkIn(mainHabit.id);
-    await cancelIds(mainHabit.scheduledNotificationIds.slice(1));
-  }
-
-  function handleUndo() {
-    if (!mainHabit) return;
-    undoCheckIn(mainHabit.id);
   }
 
   return (
@@ -163,17 +207,15 @@ export default function HomeTab() {
       <View style={{ gap: 8 }}>
         {microHabits.length === 0 ? (
           <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, paddingHorizontal: 4 }}>
-            Mikro odatlar ixtiyoriy — agar tayyor bo‘lsangiz, qo‘shing.
+            {t('home.microEmpty')}
           </Text>
         ) : (
           microHabits.map((mh) => (
             <MicroHabitRow
               key={mh.id}
               habit={mh}
-              onToggle={(id) =>
-                isDoneToday(mh) ? undoCheckIn(id) : checkIn(id)
-              }
-              onOpen={(id) => router.push(`/habit/${id}`)}
+              onToggle={handleMicroToggle}
+              onOpen={handleMicroOpen}
             />
           ))
         )}

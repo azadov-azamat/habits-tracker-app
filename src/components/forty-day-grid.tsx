@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { palette } from '@/theme/colors';
-import { addDaysKey, todayKey } from '@/utils/dateHelpers';
+import { addDaysKey, todayKey } from '@/utils/date-helpers';
 import type { Habit } from '@/store/types';
-import { CHILLA_DAYS } from '@/store/habitsStore';
+import { CHILLA_DAYS } from '@/store/habits-store';
 
 type Props = {
   habit: Habit;
@@ -16,9 +17,12 @@ type CellState = 'done' | 'today' | 'missed' | 'upcoming';
 
 const ROWS = 5;
 const COLS = 8;
+const ROW_INDEXES = Array.from({ length: ROWS }, (_, index) => index);
+const COL_INDEXES = Array.from({ length: COLS }, (_, index) => index);
 
-export function FortyDayGrid({ habit, compact }: Props) {
+export const FortyDayGrid = React.memo(function FortyDayGrid({ habit, compact }: Props) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const today = todayKey();
 
   const cells = useMemo<CellState[]>(() => {
@@ -44,9 +48,9 @@ export function FortyDayGrid({ habit, compact }: Props) {
   return (
     <View style={styles.container}>
       <View style={[styles.grid, { gap }]}>
-        {Array.from({ length: ROWS }).map((_, r) => (
+        {ROW_INDEXES.map((r) => (
           <View key={r} style={[styles.row, { gap }]}>
-            {Array.from({ length: COLS }).map((__, c) => {
+            {COL_INDEXES.map((c) => {
               const idx = r * COLS + c;
               const state = cells[idx]!;
               const bg = colorFor(state, theme.dark);
@@ -74,14 +78,17 @@ export function FortyDayGrid({ habit, compact }: Props) {
       </View>
       {!compact && (
         <View style={styles.legend}>
-          <Legend color={palette.success} label="Bajarilgan" />
-          <Legend color={palette.gridToday} label="Bugun" />
-          <Legend color={theme.dark ? palette.gridEmptyDark : palette.gridEmpty} label="Oldinda" />
+          <Legend color={palette.success} label={t('progress.gridLegend.done')} />
+          <Legend color={palette.gridToday} label={t('progress.gridLegend.today')} />
+          <Legend
+            color={theme.dark ? palette.gridEmptyDark : palette.gridEmpty}
+            label={t('progress.gridLegend.upcoming')}
+          />
         </View>
       )}
     </View>
   );
-}
+});
 
 function Legend({ color, label }: { color: string; label: string }) {
   return (

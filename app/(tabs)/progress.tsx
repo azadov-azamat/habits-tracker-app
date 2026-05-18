@@ -1,28 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { ScreenScaffold } from '@/components/ScreenScaffold';
-import { FortyDayGrid } from '@/components/FortyDayGrid';
-import { ProgressMeter } from '@/components/ProgressMeter';
-import { selectMainHabit, useHabitsStore } from '@/store/habitsStore';
-import { computeStreakStats } from '@/services/streakCalculator';
-import { EmptyState } from '@/components/EmptyState';
+import { ScreenScaffold } from '@/components/screen-scaffold';
+import { FortyDayGrid } from '@/components/forty-day-grid';
+import { ProgressMeter } from '@/components/progress-meter';
+import { selectMainHabit, useHabitsStore } from '@/store/habits-store';
+import { computeStreakStats } from '@/services/streak-calculator';
+import { EmptyState } from '@/components/empty-state';
 
 export default function ProgressTab() {
   const theme = useTheme();
   const { t } = useTranslation();
   const habit = useHabitsStore(selectMainHabit);
+  const stats = useMemo(() => (habit ? computeStreakStats(habit) : null), [habit]);
 
-  if (!habit) {
+  if (!habit || !stats) {
     return (
       <ScreenScaffold>
-        <EmptyState title={t('progress.title')} body="Asosiy odat hali tanlanmagan." />
+        <EmptyState title={t('progress.title')} body={t('progress.emptyBody')} />
       </ScreenScaffold>
     );
   }
-
-  const stats = computeStreakStats(habit);
 
   return (
     <ScreenScaffold>
@@ -73,7 +72,7 @@ export default function ProgressTab() {
       <Card mode="outlined" style={styles.card}>
         <Card.Content style={{ gap: 12, paddingVertical: 14 }}>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
-            Chilla xaritasi
+            {t('progress.mapTitle')}
           </Text>
           <FortyDayGrid habit={habit} />
         </Card.Content>
@@ -82,7 +81,15 @@ export default function ProgressTab() {
   );
 }
 
-function StatTile({ value, label, icon }: { value: string; label: string; icon: string }) {
+const StatTile = React.memo(function StatTile({
+  value,
+  label,
+  icon,
+}: {
+  value: string;
+  label: string;
+  icon: string;
+}) {
   const theme = useTheme();
   return (
     <View
@@ -100,7 +107,7 @@ function StatTile({ value, label, icon }: { value: string; label: string; icon: 
       </Text>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: { borderRadius: 20 },

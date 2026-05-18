@@ -37,7 +37,7 @@ export function WhyReminderCard({ why, identity }: Props) {
             variant="bodyMedium"
             style={[styles.identity, { color: theme.colors.onSecondaryContainer }]}
           >
-            Men {identity} bo‘lib bormoqdaman.
+            Men {identity} bo‘lib boraman.
           </Text>
         ) : null}
       </Card.Content>

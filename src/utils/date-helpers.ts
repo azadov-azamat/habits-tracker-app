@@ -1,4 +1,5 @@
 import { differenceInCalendarDays, format, parseISO } from 'date-fns';
+import { uz } from 'date-fns/locale';
 
 export type DateKey = string;
 
@@ -45,11 +46,12 @@ export function isPastKey(key: DateKey): boolean {
   return fromDateKey(key) < fromDateKey(todayKey());
 }
 
-export function partOfDay(): 'morning' | 'day' | 'evening' {
-  const h = new Date().getHours();
-  if (h < 12) return 'morning';
-  if (h < 18) return 'day';
-  return 'evening';
+export function partOfDay(now: Date = new Date()): 'morning' | 'day' | 'evening' | 'night' {
+  const h = now.getHours();
+  if (h >= 5 && h < 12) return 'morning';
+  if (h >= 12 && h < 18) return 'day';
+  if (h >= 18 && h < 22) return 'evening';
+  return 'night';
 }
 
 export function formatTimeHHMM(hour: number, minute: number): string {
@@ -62,5 +64,5 @@ export function parseTime(time: string): { hour: number; minute: number } {
 }
 
 export function formatDateUz(key: DateKey): string {
-  return format(fromDateKey(key), 'd MMMM yyyy');
+  return format(fromDateKey(key), 'd MMMM yyyy', { locale: uz }).toLocaleLowerCase('uz-UZ');
 }

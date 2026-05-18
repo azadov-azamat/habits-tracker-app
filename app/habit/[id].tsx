@@ -3,14 +3,17 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, Button, Card, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { FortyDayGrid } from '@/components/FortyDayGrid';
-import { WhyReminderCard } from '@/components/WhyReminderCard';
-import { StreakBadge } from '@/components/StreakBadge';
-import { ProgressMeter } from '@/components/ProgressMeter';
-import { useHabitsStore } from '@/store/habitsStore';
-import { computeStreakStats } from '@/services/streakCalculator';
-import { cancelHabitNotifications, rescheduleHabit } from '@/services/notifications';
-import { formatDateUz } from '@/utils/dateHelpers';
+import { FortyDayGrid } from '@/components/forty-day-grid';
+import { WhyReminderCard } from '@/components/why-reminder-card';
+import { StreakBadge } from '@/components/streak-badge';
+import { ProgressMeter } from '@/components/progress-meter';
+import { AppErrorBanner } from '@/components/app-error-banner';
+import { useHabitsStore } from '@/store/habits-store';
+import { computeStreakStats } from '@/services/streak-calculator';
+import { cancelHabitNotifications, safeRescheduleHabit } from '@/services/notifications';
+import { formatDateUz } from '@/utils/date-helpers';
+import { reportRecoverableError } from '@/utils/recoverable-error';
+import { formatActionForPreview } from '@/utils/format-action-for-preview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HabitDetail() {
@@ -76,8 +79,10 @@ export default function HabitDetail() {
     if (!habit) return;
     if (habit.status === 'paused') {
       setStatus(habit.id, 'active');
-      const ids = await rescheduleHabit({ ...habit, status: 'active' });
-      attachIds(habit.id, ids);
+      const scheduled = await safeRescheduleHabit({ ...habit, status: 'active' });
+      if (scheduled.ok) {
+        attachIds(habit.id, scheduled.value);
+      }
     } else {
       setStatus(habit.id, 'paused');
       await cancelHabitNotifications(habit);
@@ -144,15 +149,17 @@ export default function HabitDetail() {
         <Card mode="outlined" style={styles.card}>
           <Card.Content style={{ gap: 6 }}>
             <Text variant="labelMedium" style={{ color: theme.colors.primary, letterSpacing: 1 }}>
-              NIYAT
+              {t('habit.planLabel').toUpperCase()}
             </Text>
             <Text variant="bodyLarge" style={{ color: theme.colors.onSurface, lineHeight: 24 }}>
-              Qachon <Text style={{ fontWeight: '700' }}>{habit.intentionWhen}</Text>, shunda men{' '}
-              <Text style={{ fontWeight: '700' }}>{habit.intentionThen}</Text>.
+              Agar <Text style={{ fontWeight: '700' }}>{habit.intentionWhen}</Text>, men{' '}
+              <Text style={{ fontWeight: '700' }}>
+                {formatActionForPreview(habit.intentionThen)}
+              </Text>.
             </Text>
             <Divider style={{ marginVertical: 8 }} />
             <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-              Minimal versiya
+              {t('habit.easiestVersion')}
             </Text>
             <Text variant="bodyMedium" style={{ color: theme.colors.onSurface, fontStyle: 'italic' }}>
               “{habit.minimalVersion}”
@@ -161,7 +168,21 @@ export default function HabitDetail() {
         </Card>
 
         <View style={styles.actions}>
-          <Button mode="outlined" onPress={togglePause} icon={habit.status === 'paused' ? 'play' : 'pause'}>
+          <Button
+            mode="outlined"
+            onPress={() => {
+              void togglePause().catch((error) => {
+                reportRecoverableError({
+                  kind: 'habit-action',
+                  messageKey: 'errors.habitAction',
+                  retryLabelKey: 'common.tryAgain',
+                  source: 'habitDetail.togglePause',
+                  error,
+                });
+              });
+            }}
+            icon={habit.status === 'paused' ? 'play' : 'pause'}
+          >
             {habit.status === 'paused' ? t('habit.resume') : t('habit.pause')}
           </Button>
           <Button mode="text" textColor={theme.colors.error} onPress={confirmDelete} icon="delete-outline">
@@ -169,6 +190,7 @@ export default function HabitDetail() {
           </Button>
         </View>
       </ScrollView>
+      <AppErrorBanner />
     </SafeAreaView>
   );
 }
