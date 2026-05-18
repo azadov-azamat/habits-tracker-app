@@ -10,7 +10,7 @@ void i18n.use(initReactI18next).init({
   },
   lng: defaultLocale,
   fallbackLng: defaultLocale,
-  compatibilityJSON: 'v4',
+  compatibilityJSON: 'v3',
   interpolation: { escapeValue: false },
   returnNull: false,
 });
