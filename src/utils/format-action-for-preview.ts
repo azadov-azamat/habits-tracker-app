@@ -5,7 +5,7 @@ export function formatActionForPreview(action: string): string {
     return '___';
   }
 
-  const replacements: Array<[RegExp, string]> = [
+  const replacements: [RegExp, string][] = [
     [/ qilish$/i, ' qilaman'],
     [/ ichish$/i, ' ichaman'],
     [/ o‘qish$/i, ' o‘qiyman'],

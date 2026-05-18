@@ -67,8 +67,8 @@ Already kebab-case/lowercase:
 ### Verification
 
 - `npm run typecheck`: passed.
-- `npm test -- --runInBand`: passed, 11 suites and 172 tests.
-- `npm run lint`: passed after Expo CLI generated `.eslintrc.js` and installed ESLint packages into the current workspace. `package.json` and `package-lock.json` were left unchanged to avoid an unsynced npm lockfile after `npm install --package-lock-only --ignore-scripts --no-audit` failed with `ENOTFOUND registry.npmjs.org`.
+- `npm test -- --runInBand`: passed, 11 suites and 190 tests.
+- `npm run lint`: passed after Expo CLI generated `.eslintrc.js`; ESLint dev dependencies were added to `package.json` and `package-lock.json`.
 - Release-like/manual low-end device workflow verification was not fully executable from this terminal-only pass. The checks to run on device are startup, tab switching, scrolling, onboarding, habit creation, check-in, undo, progress view, settings, and notification permission-denied behavior.
 
 ### External guidance used
