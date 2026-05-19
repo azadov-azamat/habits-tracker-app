@@ -33,7 +33,12 @@ export const MicroHabitRow = React.memo(function MicroHabitRow({
         },
       ]}
     >
-      <Pressable onPress={() => onOpen(habit.id)} style={styles.info}>
+      <Pressable
+        onPress={() => onOpen(habit.id)}
+        accessibilityRole="button"
+        accessibilityLabel={`${habit.name} — ${t('habit.details')}`}
+        style={styles.info}
+      >
         <Text style={styles.emoji}>{habit.emoji}</Text>
         <View style={styles.text}>
           <Text
@@ -56,6 +61,10 @@ export const MicroHabitRow = React.memo(function MicroHabitRow({
           void haptic.light();
           onToggle(habit.id);
         }}
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked: done }}
+        accessibilityLabel={habit.name}
+        hitSlop={8}
         style={[
           styles.check,
           {
@@ -65,7 +74,7 @@ export const MicroHabitRow = React.memo(function MicroHabitRow({
         ]}
       >
         {done ? (
-          <Text style={[styles.checkMark, { color: '#FFFFFF' }]}>✓</Text>
+          <Text style={[styles.checkMark, { color: theme.colors.onTertiary }]}>✓</Text>
         ) : null}
       </Pressable>
     </View>

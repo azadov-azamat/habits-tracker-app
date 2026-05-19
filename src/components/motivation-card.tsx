@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet } from 'react-native';
 import { Portal, Modal, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { pickQuoteForDay } from '@/data/motivational-quotes';
