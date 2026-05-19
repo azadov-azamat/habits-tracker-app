@@ -97,6 +97,7 @@
     "greetingEvening": "Xayrli kech",
     "greetingNight": "Xayrli tun",
     "dayCounter": "{{day}}-kun / 40",
+    "saplingA11y": "Sizning niholingiz — {{day}}-kun, {{total}} kundan",
     "remainingDays": "{{count}} kun qoldi",
     "todayQuestion": "Bugungi odatingizni bajardingizmi?",
     "checkIn": "Bajardim",
