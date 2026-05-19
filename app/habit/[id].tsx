@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, Button, Card, Divider, Text, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Card, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { FortyDayGrid } from '@/components/forty-day-grid';
@@ -8,6 +8,7 @@ import { WhyReminderCard } from '@/components/why-reminder-card';
 import { StreakBadge } from '@/components/streak-badge';
 import { ProgressMeter } from '@/components/progress-meter';
 import { AppErrorBanner } from '@/components/app-error-banner';
+import { AppButton } from '@/components/app-button';
 import { useHabitsStore } from '@/store/habits-store';
 import { computeStreakStats } from '@/services/streak-calculator';
 import { cancelHabitNotifications, safeRescheduleHabit } from '@/services/notifications';
@@ -35,7 +36,10 @@ export default function HabitDetail() {
   if (!habit || !stats) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-        <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
+        <Appbar.Header
+          statusBarHeight={0}
+          style={{ backgroundColor: theme.colors.background }}
+        >
           <Appbar.BackAction onPress={() => router.back()} />
           <Appbar.Content title="" />
         </Appbar.Header>
@@ -92,7 +96,10 @@ export default function HabitDetail() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
+      <Appbar.Header
+        statusBarHeight={0}
+        style={{ backgroundColor: theme.colors.background }}
+      >
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={t('habit.details')} />
         <Appbar.Action
@@ -168,8 +175,8 @@ export default function HabitDetail() {
         </Card>
 
         <View style={styles.actions}>
-          <Button
-            mode="outlined"
+          <AppButton
+            variant="secondary"
             onPress={() => {
               void togglePause().catch((error) => {
                 reportRecoverableError({
@@ -184,10 +191,10 @@ export default function HabitDetail() {
             icon={habit.status === 'paused' ? 'play' : 'pause'}
           >
             {habit.status === 'paused' ? t('habit.resume') : t('habit.pause')}
-          </Button>
-          <Button mode="text" textColor={theme.colors.error} onPress={confirmDelete} icon="delete-outline">
+          </AppButton>
+          <AppButton variant="secondary" tone="danger" onPress={confirmDelete} icon="delete-outline">
             {t('habit.delete')}
-          </Button>
+          </AppButton>
         </View>
       </ScrollView>
       <AppErrorBanner />

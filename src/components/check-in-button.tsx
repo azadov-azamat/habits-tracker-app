@@ -32,14 +32,14 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
     if (!done) {
       pulse.value = withRepeat(
         withSequence(
-          withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
-          withTiming(0, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+          withTiming(1, { duration: 1400, easing: Easing.inOut(Easing.ease) }),
+          withTiming(0, { duration: 1400, easing: Easing.inOut(Easing.ease) }),
         ),
         -1,
         false,
       );
     } else {
-      pulse.value = 0;
+      pulse.value = withTiming(0, { duration: 200 });
     }
   }, [done, pulse]);
 
@@ -48,8 +48,8 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
   }));
 
   const glowStyle = useAnimatedStyle(() => ({
-    opacity: 0.2 + pulse.value * 0.3,
-    transform: [{ scale: 1 + pulse.value * 0.06 }],
+    opacity: 0.15 + pulse.value * 0.25,
+    transform: [{ scale: 1 + pulse.value * 0.05 }],
   }));
 
   function press() {
@@ -67,7 +67,7 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
   }
 
   const bg = done ? theme.colors.tertiary : theme.colors.primary;
-  const fg = done ? '#FFFFFF' : theme.colors.onPrimary;
+  const fg = done ? theme.colors.onTertiary : theme.colors.onPrimary;
 
   return (
     <View style={styles.wrapper}>
@@ -83,6 +83,8 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
       )}
       <AnimatedPressable
         onPress={press}
+        accessibilityRole="button"
+        accessibilityLabel={done ? doneLabel : pendingLabel}
         style={[styles.button, { backgroundColor: bg }, animStyle]}
       >
         <Text variant="titleLarge" style={[styles.icon, { color: fg }]}>
@@ -93,8 +95,19 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
         </Text>
       </AnimatedPressable>
       {done && (
-        <Pressable onPress={press} style={styles.undo}>
-          <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+        <Pressable
+          onPress={press}
+          accessibilityRole="button"
+          accessibilityLabel={undoLabel}
+          style={[
+            styles.undo,
+            {
+              backgroundColor: theme.colors.surfaceVariant,
+              borderColor: theme.colors.outlineVariant,
+            },
+          ]}
+        >
+          <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
             {undoLabel}
           </Text>
         </Pressable>
@@ -104,11 +117,11 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
 }
 
 const styles = StyleSheet.create({
-  wrapper: { alignItems: 'center' },
+  wrapper: { alignItems: 'stretch' },
   glow: { borderRadius: 999 },
   button: {
-    minWidth: 240,
-    paddingHorizontal: 28,
+    minHeight: 64,
+    paddingHorizontal: 32,
     paddingVertical: 18,
     borderRadius: 999,
     flexDirection: 'row',
@@ -116,6 +129,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 12,
   },
-  icon: { fontSize: 22 },
-  undo: { marginTop: 10, padding: 6 },
+  icon: { fontSize: 24 },
+  undo: {
+    marginTop: 12,
+    alignSelf: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
 });
