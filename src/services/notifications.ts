@@ -101,10 +101,9 @@ export async function scheduleDailyReminder(habit: Habit): Promise<string> {
       data: { habitId: habit.id, type: 'daily' },
     },
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour,
       minute,
-      repeats: true,
       channelId: CHANNEL_ID,
     },
   });
@@ -158,10 +157,9 @@ export async function scheduleMorningGreeting(time: string): Promise<string> {
       data: { type: 'morning' },
     },
     trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour,
       minute,
-      repeats: true,
       channelId: CHANNEL_ID,
     },
   });

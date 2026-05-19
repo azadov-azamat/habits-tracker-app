@@ -95,11 +95,15 @@ describe('notifications service', () => {
   });
 
   describe('scheduleDailyReminder', () => {
-    it('schedules a repeating calendar trigger with parsed time', async () => {
+    it('schedules a daily trigger with parsed time', async () => {
       const id = await scheduleDailyReminder(habit({ reminderTime: '09:15' }));
       expect(id).toBeTruthy();
       const req = scheduled.get(id)!;
-      expect(req.trigger).toMatchObject({ hour: 9, minute: 15, repeats: true });
+      expect(req.trigger).toMatchObject({
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour: 9,
+        minute: 15,
+      });
     });
 
     it('attaches the HABIT_REMINDER category', async () => {
