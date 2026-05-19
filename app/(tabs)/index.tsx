@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AppState, Pressable, StyleSheet, View } from 'react-native';
+import { AppState, StyleSheet, View } from 'react-native';
 import { IconButton, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
 import { ScreenScaffold } from '@/components/screen-scaffold';
-import { FortyDayGrid } from '@/components/forty-day-grid';
+import { Sapling } from '@/components/sapling';
 import { CheckInButton } from '@/components/check-in-button';
 import { StreakBadge } from '@/components/streak-badge';
 import { WhyReminderCard } from '@/components/why-reminder-card';
-import { MotivationCard } from '@/components/motivation-card';
 import { MinimumViableCard } from '@/components/minimum-viable-card';
 import { RecoveryCard } from '@/components/recovery-card';
-import { MicroHabitRow } from '@/components/micro-habit-row';
+import { MicroHabitsChip } from '@/components/micro-habits-chip';
+import { MicroHabitsSheet } from '@/components/micro-habits-sheet';
 import { MilestoneModal } from '@/components/milestone-modal';
 import { EmptyState } from '@/components/empty-state';
-import { AppButton } from '@/components/app-button';
 import {
   canAddMicroHabit,
   selectMainHabit,
@@ -61,7 +60,7 @@ export default function HomeTab() {
   const [greetingKey, setGreetingKey] = useState(() => greetingKeyFor(partOfDay()));
   const [isEvening, setIsEvening] = useState(() => new Date().getHours() >= 18);
   const [recoveryDismissed, setRecoveryDismissed] = useState(false);
-  const [microExpanded, setMicroExpanded] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -178,8 +177,14 @@ export default function HomeTab() {
           />
         </View>
 
-        <View style={styles.gridWrap}>
-          <FortyDayGrid habit={mainHabit} />
+        <View style={styles.saplingWrap}>
+          <Sapling
+            currentDay={stats.currentDay}
+            completionRate={stats.completionRate}
+            emoji={mainHabit.emoji}
+            animateKey={fireBurst}
+            size={160}
+          />
         </View>
 
         <CheckInButton
@@ -189,6 +194,19 @@ export default function HomeTab() {
           doneLabel={t('home.alreadyDone')}
           pendingLabel={t('home.checkIn')}
           undoLabel={t('home.undo')}
+        />
+
+        <MicroHabitsChip
+          totalCount={microHabits.length}
+          doneCount={doneMicroCount}
+          canAdd={canAddMicro}
+          onPress={() => {
+            if (microHabits.length === 0 && canAddMicro) {
+              router.push('/habit/new');
+            } else {
+              setSheetOpen(true);
+            }
+          }}
         />
       </View>
 
@@ -208,61 +226,15 @@ export default function HomeTab() {
 
       <WhyReminderCard why={mainHabit.why} identity={mainHabit.identity} />
 
-      <View style={styles.microSection}>
-        <Pressable
-          onPress={() => setMicroExpanded((v) => !v)}
-          accessibilityRole="button"
-          accessibilityLabel={t('home.microHabitsTitle')}
-          style={styles.microHeader}
-        >
-          <Text
-            variant="titleMedium"
-            style={{ color: theme.colors.onBackground, fontWeight: '700' }}
-          >
-            {microExpanded ? '⌄' : '›'}  {t('home.microHabitsTitle')}
-            {microHabits.length > 0 ? (
-              <Text style={{ color: theme.colors.onSurfaceVariant, fontWeight: '500' }}>
-                {'  '}({doneMicroCount}/{microHabits.length})
-              </Text>
-            ) : null}
-          </Text>
-          {microExpanded && canAddMicro ? (
-            <AppButton
-              variant="ghost"
-              size="small"
-              icon="plus"
-              compact
-              onPress={() => router.push('/habit/new')}
-            >
-              {t('home.addMicroHabit')}
-            </AppButton>
-          ) : null}
-        </Pressable>
-
-        {microExpanded ? (
-          <View style={{ gap: 8, marginTop: 8 }}>
-            {microHabits.length === 0 ? (
-              <Text
-                variant="bodySmall"
-                style={{ color: theme.colors.onSurfaceVariant, paddingHorizontal: 4 }}
-              >
-                {t('home.microEmpty')}
-              </Text>
-            ) : (
-              microHabits.map((mh) => (
-                <MicroHabitRow
-                  key={mh.id}
-                  habit={mh}
-                  onToggle={handleMicroToggle}
-                  onOpen={handleMicroOpen}
-                />
-              ))
-            )}
-          </View>
-        ) : null}
-      </View>
-
-      <MotivationCard />
+      <MicroHabitsSheet
+        visible={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        microHabits={microHabits}
+        canAdd={canAddMicro}
+        onToggle={handleMicroToggle}
+        onOpen={handleMicroOpen}
+        onAdd={() => router.push('/habit/new')}
+      />
 
       <MilestoneModal
         visible={milestoneDay !== null}
@@ -292,13 +264,5 @@ const styles = StyleSheet.create({
   habitCard: { padding: 16, borderRadius: 24, borderWidth: 1, gap: 16 },
   habitHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   habitEmoji: { fontSize: 36 },
-  gridWrap: { alignItems: 'center', paddingVertical: 8 },
-  microSection: { gap: 0 },
-  microHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 4,
-    paddingVertical: 8,
-  },
+  saplingWrap: { alignItems: 'center', paddingVertical: 8 },
 });
