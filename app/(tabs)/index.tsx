@@ -140,7 +140,7 @@ export default function HomeTab() {
   const doneMicroCount = microHabits.filter((m) => isDoneToday(m)).length;
 
   return (
-    <ScreenScaffold>
+    <ScreenScaffold contentStyle={styles.scrollContent} bottomInset={false}>
       <View style={styles.header}>
         <View>
           <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
@@ -287,6 +287,7 @@ export default function HomeTab() {
 }
 
 const styles = StyleSheet.create({
+  scrollContent: { padding: 20, gap: 16, paddingBottom: 110 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   habitCard: { padding: 16, borderRadius: 24, borderWidth: 1, gap: 16 },
   habitHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },

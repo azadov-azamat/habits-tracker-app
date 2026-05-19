@@ -51,7 +51,7 @@ export default function SettingsTab() {
   }
 
   return (
-    <ScreenScaffold>
+    <ScreenScaffold contentStyle={styles.scrollContent} bottomInset={false}>
       <Text variant="headlineSmall" style={{ color: theme.colors.onBackground, fontWeight: '800' }}>
         {t('settings.title')}
       </Text>
@@ -200,6 +200,7 @@ export default function SettingsTab() {
 }
 
 const styles = StyleSheet.create({
+  scrollContent: { padding: 20, gap: 16, paddingBottom: 110 },
   section: { marginVertical: 0 },
   subheader: { paddingHorizontal: 4, fontWeight: '700' },
   item: { paddingHorizontal: 8 },

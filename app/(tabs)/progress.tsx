@@ -27,7 +27,7 @@ export default function ProgressTab() {
   }
 
   return (
-    <ScreenScaffold>
+    <ScreenScaffold contentStyle={styles.scrollContent} bottomInset={false}>
       <Text variant="headlineSmall" style={{ color: theme.colors.onBackground, fontWeight: '800' }}>
         {t('progress.title')}
       </Text>
@@ -141,6 +141,7 @@ const StatTile = React.memo(function StatTile({
 });
 
 const styles = StyleSheet.create({
+  scrollContent: { padding: 20, gap: 16, paddingBottom: 110 },
   card: { borderRadius: 20 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   emoji: { fontSize: 28 },
