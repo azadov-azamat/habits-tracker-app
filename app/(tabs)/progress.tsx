@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScreenScaffold } from '@/components/screen-scaffold';
 import { FortyDayGrid } from '@/components/forty-day-grid';
 import { ProgressMeter } from '@/components/progress-meter';
+import { MotivationCard } from '@/components/motivation-card';
 import { selectMainHabit, useHabitsStore } from '@/store/habits-store';
 import { computeStreakStats } from '@/services/streak-calculator';
 import { EmptyState } from '@/components/empty-state';
@@ -31,6 +32,8 @@ export default function ProgressTab() {
       <Text variant="headlineSmall" style={{ color: theme.colors.onBackground, fontWeight: '800' }}>
         {t('progress.title')}
       </Text>
+
+      <MotivationCard variant="inline" />
 
       <Card mode="contained" style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <Card.Content style={{ gap: 12, paddingVertical: 14 }}>
