@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
+import { OnboardingFooter } from '@/components/onboarding-footer';
+import { PreviewCard } from '@/components/preview-card';
 import { identityExamples } from '@/data/identity-examples';
 import { useOnboardingStore } from '@/store/onboarding-store';
 
@@ -20,8 +22,17 @@ export default function Identity() {
     [setDraft],
   );
 
+  const previewValue = value || t('onboarding.identity.templatePlaceholder');
+
   return (
-    <ScreenScaffold>
+    <ScreenScaffold
+      footer={(
+        <OnboardingFooter
+          disabled={!canContinue}
+          onNext={() => router.push('/(onboarding)/habit')}
+        />
+      )}
+    >
       <View style={styles.head}>
         <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.onBackground }]}>
           {t('onboarding.identity.title')}
@@ -31,17 +42,14 @@ export default function Identity() {
         </Text>
       </View>
 
-      <View style={styles.previewWrap}>
-        <Text variant="titleMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-          {t('onboarding.identity.label')}
-        </Text>
+      <PreviewCard tone="primary" label={t('onboarding.identity.label')}>
         <Text
           variant="headlineSmall"
-          style={[styles.preview, { color: theme.colors.primary, fontWeight: '800' }]}
+          style={[styles.preview, { color: theme.colors.onPrimaryContainer, fontWeight: '800' }]}
         >
-          Men {value || '___'} bo‘lib boraman
+          {t('onboarding.identity.template', { value: previewValue })}
         </Text>
-      </View>
+      </PreviewCard>
 
       <TextInput
         mode="outlined"
@@ -76,17 +84,6 @@ export default function Identity() {
         ))}
       </View>
 
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          disabled={!canContinue}
-          onPress={() => router.push('/(onboarding)/habit')}
-          contentStyle={{ paddingVertical: 6 }}
-          style={{ borderRadius: 999 }}
-        >
-          {t('common.next')}
-        </Button>
-      </View>
     </ScreenScaffold>
   );
 }
@@ -94,14 +91,7 @@ export default function Identity() {
 const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  previewWrap: {
-    padding: 20,
-    borderRadius: 20,
-    backgroundColor: 'rgba(124, 77, 255, 0.08)',
-    gap: 8,
-  },
   preview: { lineHeight: 32 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 999, borderWidth: 1 },
-  footer: { marginTop: 8 },
 });

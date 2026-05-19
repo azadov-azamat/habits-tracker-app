@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
+import { OnboardingFooter } from '@/components/onboarding-footer';
+import { PreviewCard } from '@/components/preview-card';
 import { useOnboardingStore } from '@/store/onboarding-store';
 
 export default function Why() {
@@ -16,7 +18,14 @@ export default function Why() {
   const canContinue = why.trim().length >= 6;
 
   return (
-    <ScreenScaffold>
+    <ScreenScaffold
+      footer={(
+        <OnboardingFooter
+          disabled={!canContinue}
+          onNext={() => router.push('/(onboarding)/intention')}
+        />
+      )}
+    >
       <View style={styles.head}>
         <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.onBackground }]}>
           {t('onboarding.why.title')}
@@ -26,15 +35,14 @@ export default function Why() {
         </Text>
       </View>
 
-      <View style={[styles.previewWrap, { backgroundColor: theme.colors.secondaryContainer }]}>
-        <Text style={styles.icon}>💛</Text>
+      <PreviewCard tone="secondary" emoji="💛">
         <Text
           variant="titleMedium"
           style={{ color: theme.colors.onSecondaryContainer, lineHeight: 24 }}
         >
           {why || t('onboarding.why.placeholder')}
         </Text>
-      </View>
+      </PreviewCard>
 
       <TextInput
         mode="outlined"
@@ -46,17 +54,6 @@ export default function Why() {
         style={styles.input}
       />
 
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          disabled={!canContinue}
-          onPress={() => router.push('/(onboarding)/intention')}
-          contentStyle={{ paddingVertical: 6 }}
-          style={{ borderRadius: 999 }}
-        >
-          {t('common.next')}
-        </Button>
-      </View>
     </ScreenScaffold>
   );
 }
@@ -64,8 +61,5 @@ export default function Why() {
 const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  previewWrap: { padding: 20, borderRadius: 20, gap: 10 },
-  icon: { fontSize: 20 },
   input: { minHeight: 120 },
-  footer: { marginTop: 8 },
 });

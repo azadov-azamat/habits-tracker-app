@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
+import { OnboardingFooter } from '@/components/onboarding-footer';
+import { PreviewCard } from '@/components/preview-card';
 import { useOnboardingStore } from '@/store/onboarding-store';
 import { formatActionForPreview } from '@/utils/format-action-for-preview';
 
@@ -17,10 +19,18 @@ export default function Intention() {
   const then = draft.intentionThen ?? draft.name ?? '';
   const minimal = draft.minimalVersion ?? '';
   const previewAction = formatActionForPreview(then);
+  const placeholder = t('onboarding.intention.templatePlaceholder');
   const canContinue = when.trim().length > 0 && then.trim().length > 0 && minimal.trim().length > 0;
 
   return (
-    <ScreenScaffold>
+    <ScreenScaffold
+      footer={(
+        <OnboardingFooter
+          disabled={!canContinue}
+          onNext={() => router.push('/(onboarding)/schedule')}
+        />
+      )}
+    >
       <View style={styles.head}>
         <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.onBackground }]}>
           {t('onboarding.intention.title')}
@@ -30,15 +40,17 @@ export default function Intention() {
         </Text>
       </View>
 
-      <View style={[styles.preview, { backgroundColor: 'rgba(124, 77, 255, 0.08)' }]}>
-        <Text variant="labelMedium" style={{ color: theme.colors.primary, letterSpacing: 1 }}>
-          {t('onboarding.intention.preview').toUpperCase()}
+      <PreviewCard tone="primary" label={t('onboarding.intention.preview')}>
+        <Text
+          variant="titleMedium"
+          style={{ color: theme.colors.onPrimaryContainer, lineHeight: 24 }}
+        >
+          {t('onboarding.intention.templateWhen')}{' '}
+          <Text style={{ fontWeight: '700' }}>{when || placeholder}</Text>,{' '}
+          {t('onboarding.intention.templateThen')}{' '}
+          <Text style={{ fontWeight: '700' }}>{previewAction || placeholder}</Text>.
         </Text>
-        <Text variant="titleMedium" style={{ color: theme.colors.onSurface, lineHeight: 24 }}>
-          Agar <Text style={{ fontWeight: '700' }}>{when || '___'}</Text>, men{' '}
-          <Text style={{ fontWeight: '700' }}>{previewAction}</Text>.
-        </Text>
-      </View>
+      </PreviewCard>
 
       <TextInput
         mode="outlined"
@@ -55,7 +67,7 @@ export default function Intention() {
         placeholder={t('onboarding.intention.thenPlaceholder')}
       />
 
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
 
       <TextInput
         mode="outlined"
@@ -68,17 +80,6 @@ export default function Intention() {
         {t('onboarding.intention.minimalHint')}
       </Text>
 
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          disabled={!canContinue}
-          onPress={() => router.push('/(onboarding)/schedule')}
-          contentStyle={{ paddingVertical: 6 }}
-          style={{ borderRadius: 999 }}
-        >
-          {t('common.next')}
-        </Button>
-      </View>
     </ScreenScaffold>
   );
 }
@@ -86,7 +87,5 @@ export default function Intention() {
 const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  preview: { padding: 20, borderRadius: 20, gap: 8 },
-  divider: { height: 1, backgroundColor: 'rgba(0,0,0,0.08)', marginVertical: 4 },
-  footer: { marginTop: 8 },
+  divider: { height: StyleSheet.hairlineWidth, marginVertical: 4 },
 });

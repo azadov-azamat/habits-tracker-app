@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text, useTheme, type MD3Theme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { palette } from '@/theme/colors';
 import { addDaysKey, todayKey } from '@/utils/date-helpers';
 import type { Habit } from '@/store/types';
 import { CHILLA_DAYS } from '@/store/habits-store';
@@ -11,6 +10,7 @@ import { CHILLA_DAYS } from '@/store/habits-store';
 type Props = {
   habit: Habit;
   compact?: boolean;
+  showLegend?: boolean;
 };
 
 type CellState = 'done' | 'today' | 'missed' | 'upcoming';
@@ -20,7 +20,11 @@ const COLS = 8;
 const ROW_INDEXES = Array.from({ length: ROWS }, (_, index) => index);
 const COL_INDEXES = Array.from({ length: COLS }, (_, index) => index);
 
-export const FortyDayGrid = React.memo(function FortyDayGrid({ habit, compact }: Props) {
+export const FortyDayGrid = React.memo(function FortyDayGrid({
+  habit,
+  compact,
+  showLegend = false,
+}: Props) {
   const theme = useTheme();
   const { t } = useTranslation();
   const today = todayKey();
@@ -53,8 +57,8 @@ export const FortyDayGrid = React.memo(function FortyDayGrid({ habit, compact }:
             {COL_INDEXES.map((c) => {
               const idx = r * COLS + c;
               const state = cells[idx]!;
-              const bg = colorFor(state, theme.dark);
-              const border = state === 'today' ? palette.secondary : 'transparent';
+              const bg = colorFor(state, theme);
+              const border = state === 'today' ? theme.colors.primary : 'transparent';
               return (
                 <Animated.View
                   key={idx}
@@ -76,14 +80,11 @@ export const FortyDayGrid = React.memo(function FortyDayGrid({ habit, compact }:
           </View>
         ))}
       </View>
-      {!compact && (
+      {showLegend && !compact && (
         <View style={styles.legend}>
-          <Legend color={palette.success} label={t('progress.gridLegend.done')} />
-          <Legend color={palette.gridToday} label={t('progress.gridLegend.today')} />
-          <Legend
-            color={theme.dark ? palette.gridEmptyDark : palette.gridEmpty}
-            label={t('progress.gridLegend.upcoming')}
-          />
+          <Legend color={theme.colors.tertiary} label={t('progress.gridLegend.done')} />
+          <Legend color={theme.colors.secondaryContainer} label={t('progress.gridLegend.today')} />
+          <Legend color={theme.colors.surfaceVariant} label={t('progress.gridLegend.upcoming')} />
         </View>
       )}
     </View>
@@ -99,16 +100,16 @@ function Legend({ color, label }: { color: string; label: string }) {
   );
 }
 
-function colorFor(state: CellState, dark: boolean): string {
+function colorFor(state: CellState, theme: MD3Theme): string {
   switch (state) {
     case 'done':
-      return dark ? palette.successDark : palette.success;
+      return theme.colors.tertiary;
     case 'today':
-      return dark ? palette.gridTodayDark : palette.gridToday;
+      return theme.colors.secondaryContainer;
     case 'missed':
-      return dark ? '#3D3650' : '#D6CCDE';
+      return theme.colors.surfaceVariant;
     case 'upcoming':
-      return dark ? palette.gridEmptyDark : palette.gridEmpty;
+      return theme.colors.surfaceVariant;
   }
 }
 

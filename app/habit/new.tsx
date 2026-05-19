@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { canAddMicroHabit, useHabitsStore } from '@/store/habits-store';
 import { emojiOptions } from '@/data/identity-examples';
 import { AppErrorBanner } from '@/components/app-error-banner';
+import { AppButton } from '@/components/app-button';
+import { PreviewCard } from '@/components/preview-card';
 import { IntervalChips, TimePicker } from '@/components/time-interval-picker';
 import { safeEnsureNotificationSetup, safeRescheduleHabit } from '@/services/notifications';
 import { reportRecoverableError } from '@/utils/recoverable-error';
@@ -68,7 +70,10 @@ export default function NewHabit() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
+      <Appbar.Header
+        statusBarHeight={0}
+        style={{ backgroundColor: theme.colors.background }}
+      >
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={t('habit.newMicroHabit')} />
       </Appbar.Header>
@@ -79,12 +84,12 @@ export default function NewHabit() {
           </Text>
         ) : null}
 
-        <View style={[styles.preview, { backgroundColor: 'rgba(124, 77, 255, 0.08)' }]}>
+        <PreviewCard tone="primary" centered>
           <Text style={styles.bigEmoji}>{emoji}</Text>
-          <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+          <Text variant="titleMedium" style={{ color: theme.colors.onPrimaryContainer }}>
             {name || '...'}
           </Text>
-        </View>
+        </PreviewCard>
 
         <TextInput
           mode="outlined"
@@ -140,16 +145,15 @@ export default function NewHabit() {
           onChange={setMax}
         />
 
-        <Button
-          mode="contained"
+        <AppButton
           onPress={save}
           loading={submitting}
           disabled={!allowed || !name.trim()}
-          style={{ borderRadius: 999, marginTop: 8 }}
-          contentStyle={{ paddingVertical: 6 }}
+          style={{ marginTop: 8 }}
+          fullWidth
         >
           {t('common.save')}
-        </Button>
+        </AppButton>
       </ScrollView>
       <AppErrorBanner />
     </SafeAreaView>
@@ -158,7 +162,6 @@ export default function NewHabit() {
 
 const styles = StyleSheet.create({
   content: { padding: 20, gap: 16, paddingBottom: 40 },
-  preview: { alignItems: 'center', padding: 20, borderRadius: 20, gap: 6 },
   bigEmoji: { fontSize: 48 },
   emojiRow: { gap: 8 },
   emojiChip: {

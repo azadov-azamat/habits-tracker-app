@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { Text, TextInput, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
+import { OnboardingFooter } from '@/components/onboarding-footer';
+import { PreviewCard } from '@/components/preview-card';
 import { useOnboardingStore } from '@/store/onboarding-store';
 import { habitSuggestions } from '@/data/habit-suggestions';
 import { emojiOptions } from '@/data/identity-examples';
@@ -34,7 +36,15 @@ export default function HabitScreen() {
   );
 
   return (
-    <ScreenScaffold scroll={false}>
+    <ScreenScaffold
+      scroll={false}
+      footer={(
+        <OnboardingFooter
+          disabled={!canContinue}
+          onNext={() => router.push('/(onboarding)/why')}
+        />
+      )}
+    >
       <View style={styles.header}>
         <View style={styles.head}>
           <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.onBackground }]}>
@@ -45,12 +55,12 @@ export default function HabitScreen() {
           </Text>
         </View>
 
-        <View style={styles.preview}>
+        <PreviewCard tone="primary" centered>
           <Text style={styles.emojiBig}>{emoji}</Text>
-          <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+          <Text variant="titleMedium" style={{ color: theme.colors.onPrimaryContainer }}>
             {name || '...'}
           </Text>
-        </View>
+        </PreviewCard>
 
         <TextInput
           mode="outlined"
@@ -120,17 +130,6 @@ export default function HabitScreen() {
         </ScrollView>
       </View>
 
-      <View style={[styles.footer, { backgroundColor: theme.colors.background, borderTopColor: theme.colors.outlineVariant }]}>
-        <Button
-          mode="contained"
-          disabled={!canContinue}
-          onPress={() => router.push('/(onboarding)/why')}
-          contentStyle={{ paddingVertical: 6 }}
-          style={{ borderRadius: 999 }}
-        >
-          {t('common.next')}
-        </Button>
-      </View>
     </ScreenScaffold>
   );
 }
@@ -143,13 +142,6 @@ const styles = StyleSheet.create({
   },
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  preview: {
-    alignItems: 'center',
-    padding: 20,
-    borderRadius: 20,
-    backgroundColor: 'rgba(124, 77, 255, 0.08)',
-    gap: 6,
-  },
   emojiBig: { fontSize: 56 },
   emojiRow: { gap: 8 },
   emojiChip: {
@@ -179,10 +171,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   suggestionEmoji: { fontSize: 20 },
-  footer: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 12,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
 });

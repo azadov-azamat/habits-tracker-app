@@ -42,7 +42,9 @@
       "subtitle": "Odatlar shunchaki harakatlar emas — ular siz qanday inson bo‘lishni istayotganingizni ko‘rsatadi.",
       "label": "Jumlani to‘ldiring:",
       "placeholder": "masalan: sog‘lom inson",
-      "hint": "Misollar: intizomli, sog‘lom, bilimli, sabrli, mehribon"
+      "hint": "Misollar: intizomli, sog‘lom, bilimli, sabrli, mehribon",
+      "template": "Men {{value}} bo‘lib boraman",
+      "templatePlaceholder": "___"
     },
     "habit": {
       "title": "Qaysi odatni shakllantiramiz?",
@@ -65,6 +67,9 @@
       "thenLabel": "Nima qilasiz?",
       "thenPlaceholder": "masalan: 1 stakan suv ichaman",
       "preview": "Rejangiz:",
+      "templateWhen": "Agar",
+      "templateThen": "men",
+      "templatePlaceholder": "___",
       "minimalLabel": "Eng oson ko‘rinishi (og‘ir kunlar uchun)",
       "minimalPlaceholder": "masalan: hech bo‘lmasa 1 qultum suv ichaman",
       "minimalHint": "Bu “2 daqiqalik qoida”: kuchingiz kam bo‘lsa ham, odatning eng kichik ko‘rinishini bajarishingiz mumkin."
