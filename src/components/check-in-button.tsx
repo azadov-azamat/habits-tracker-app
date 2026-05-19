@@ -85,6 +85,7 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
         onPress={press}
         accessibilityRole="button"
         accessibilityLabel={done ? doneLabel : pendingLabel}
+        accessibilityHint={done ? undoLabel : undefined}
         style={[styles.button, { backgroundColor: bg }, animStyle]}
       >
         <Text variant="titleLarge" style={[styles.icon, { color: fg }]}>
@@ -94,24 +95,6 @@ export function CheckInButton({ done, onCheckIn, onUndo, doneLabel, pendingLabel
           {done ? doneLabel : pendingLabel}
         </Text>
       </AnimatedPressable>
-      {done && (
-        <Pressable
-          onPress={press}
-          accessibilityRole="button"
-          accessibilityLabel={undoLabel}
-          style={[
-            styles.undo,
-            {
-              backgroundColor: theme.colors.surfaceVariant,
-              borderColor: theme.colors.outlineVariant,
-            },
-          ]}
-        >
-          <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
-            {undoLabel}
-          </Text>
-        </Pressable>
-      )}
     </View>
   );
 }
@@ -130,12 +113,4 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   icon: { fontSize: 24 },
-  undo: {
-    marginTop: 12,
-    alignSelf: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 999,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
 });
