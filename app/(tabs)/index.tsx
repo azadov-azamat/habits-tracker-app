@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AppState, StyleSheet, View } from 'react-native';
-import { Button, IconButton, Text, useTheme } from 'react-native-paper';
+import { AppState, Pressable, StyleSheet, View } from 'react-native';
+import { IconButton, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
@@ -15,6 +15,7 @@ import { RecoveryCard } from '@/components/recovery-card';
 import { MicroHabitRow } from '@/components/micro-habit-row';
 import { MilestoneModal } from '@/components/milestone-modal';
 import { EmptyState } from '@/components/empty-state';
+import { AppButton } from '@/components/app-button';
 import {
   canAddMicroHabit,
   selectMainHabit,
@@ -58,10 +59,14 @@ export default function HomeTab() {
   const done = !!mainHabit && isDoneToday(mainHabit);
 
   const [greetingKey, setGreetingKey] = useState(() => greetingKeyFor(partOfDay()));
+  const [isEvening, setIsEvening] = useState(() => new Date().getHours() >= 18);
+  const [recoveryDismissed, setRecoveryDismissed] = useState(false);
+  const [microExpanded, setMicroExpanded] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       setGreetingKey(greetingKeyFor(partOfDay()));
+      setIsEvening(new Date().getHours() >= 18);
     }, []),
   );
 
@@ -69,12 +74,14 @@ export default function HomeTab() {
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
         setGreetingKey(greetingKeyFor(partOfDay()));
+        setIsEvening(new Date().getHours() >= 18);
       }
     });
     return () => sub.remove();
   }, []);
 
   const [milestoneDay, setMilestoneDay] = useState<number | null>(null);
+  const [fireBurst, setFireBurst] = useState(0);
 
   useEffect(() => {
     if (!mainHabit) return;
@@ -85,6 +92,7 @@ export default function HomeTab() {
   const handleCheckIn = useCallback(async () => {
     if (!mainHabit) return;
     checkIn(mainHabit.id);
+    setFireBurst((value) => value + 1);
     await cancelIds(mainHabit.scheduledNotificationIds.slice(1));
   }, [checkIn, mainHabit]);
 
@@ -126,6 +134,11 @@ export default function HomeTab() {
     );
   }
 
+  const showRecovery =
+    !done && !recoveryDismissed && (stats.missedTwoInARow || stats.missedYesterday);
+  const showMinimal = !done && (isEvening || stats.missedTwoInARow);
+  const doneMicroCount = microHabits.filter((m) => isDoneToday(m)).length;
+
   return (
     <ScreenScaffold>
       <View style={styles.header}>
@@ -137,10 +150,17 @@ export default function HomeTab() {
             {t('home.dayCounter', { day: stats.currentDay })}
           </Text>
         </View>
-        <StreakBadge streak={stats.currentStreak} />
+        {stats.currentStreak > 0 ? (
+          <StreakBadge streak={stats.currentStreak} animateKey={fireBurst} />
+        ) : null}
       </View>
 
-      <View style={[styles.habitCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}>
+      <View
+        style={[
+          styles.habitCard,
+          { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
+        ]}
+      >
         <View style={styles.habitHead}>
           <Text style={styles.habitEmoji}>{mainHabit.emoji}</Text>
           <View style={{ flex: 1 }}>
@@ -154,6 +174,7 @@ export default function HomeTab() {
           <IconButton
             icon="chevron-right"
             onPress={() => router.push(`/habit/${mainHabit.id}`)}
+            accessibilityLabel={t('habit.details')}
           />
         </View>
 
@@ -171,13 +192,14 @@ export default function HomeTab() {
         />
       </View>
 
-      {!done && stats.missedTwoInARow ? (
-        <RecoveryCard twoInARow />
-      ) : !done && stats.missedYesterday ? (
-        <RecoveryCard twoInARow={false} />
+      {showRecovery ? (
+        <RecoveryCard
+          twoInARow={stats.missedTwoInARow}
+          onDismiss={() => setRecoveryDismissed(true)}
+        />
       ) : null}
 
-      {!done ? (
+      {showMinimal ? (
         <MinimumViableCard
           minimalVersion={mainHabit.minimalVersion}
           onAccept={handleCheckIn}
@@ -186,40 +208,61 @@ export default function HomeTab() {
 
       <WhyReminderCard why={mainHabit.why} identity={mainHabit.identity} />
 
-      <MotivationCard />
-
-      <View style={styles.microHeader}>
-        <Text variant="titleMedium" style={{ color: theme.colors.onBackground, fontWeight: '700' }}>
-          {t('home.microHabitsTitle')}
-        </Text>
-        {canAddMicro ? (
-          <Button
-            mode="text"
-            icon="plus"
-            compact
-            onPress={() => router.push('/habit/new')}
+      <View style={styles.microSection}>
+        <Pressable
+          onPress={() => setMicroExpanded((v) => !v)}
+          accessibilityRole="button"
+          accessibilityLabel={t('home.microHabitsTitle')}
+          style={styles.microHeader}
+        >
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onBackground, fontWeight: '700' }}
           >
-            {t('home.addMicroHabit')}
-          </Button>
+            {microExpanded ? '⌄' : '›'}  {t('home.microHabitsTitle')}
+            {microHabits.length > 0 ? (
+              <Text style={{ color: theme.colors.onSurfaceVariant, fontWeight: '500' }}>
+                {'  '}({doneMicroCount}/{microHabits.length})
+              </Text>
+            ) : null}
+          </Text>
+          {microExpanded && canAddMicro ? (
+            <AppButton
+              variant="ghost"
+              size="small"
+              icon="plus"
+              compact
+              onPress={() => router.push('/habit/new')}
+            >
+              {t('home.addMicroHabit')}
+            </AppButton>
+          ) : null}
+        </Pressable>
+
+        {microExpanded ? (
+          <View style={{ gap: 8, marginTop: 8 }}>
+            {microHabits.length === 0 ? (
+              <Text
+                variant="bodySmall"
+                style={{ color: theme.colors.onSurfaceVariant, paddingHorizontal: 4 }}
+              >
+                {t('home.microEmpty')}
+              </Text>
+            ) : (
+              microHabits.map((mh) => (
+                <MicroHabitRow
+                  key={mh.id}
+                  habit={mh}
+                  onToggle={handleMicroToggle}
+                  onOpen={handleMicroOpen}
+                />
+              ))
+            )}
+          </View>
         ) : null}
       </View>
 
-      <View style={{ gap: 8 }}>
-        {microHabits.length === 0 ? (
-          <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, paddingHorizontal: 4 }}>
-            {t('home.microEmpty')}
-          </Text>
-        ) : (
-          microHabits.map((mh) => (
-            <MicroHabitRow
-              key={mh.id}
-              habit={mh}
-              onToggle={handleMicroToggle}
-              onOpen={handleMicroOpen}
-            />
-          ))
-        )}
-      </View>
+      <MotivationCard />
 
       <MilestoneModal
         visible={milestoneDay !== null}
@@ -249,10 +292,12 @@ const styles = StyleSheet.create({
   habitHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   habitEmoji: { fontSize: 36 },
   gridWrap: { alignItems: 'center', paddingVertical: 8 },
+  microSection: { gap: 0 },
   microHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 4,
+    paddingVertical: 8,
   },
 });

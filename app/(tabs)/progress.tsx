@@ -2,12 +2,15 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScreenScaffold } from '@/components/screen-scaffold';
 import { FortyDayGrid } from '@/components/forty-day-grid';
 import { ProgressMeter } from '@/components/progress-meter';
 import { selectMainHabit, useHabitsStore } from '@/store/habits-store';
 import { computeStreakStats } from '@/services/streak-calculator';
 import { EmptyState } from '@/components/empty-state';
+
+type StatIcon = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 export default function ProgressTab() {
   const theme = useTheme();
@@ -50,22 +53,26 @@ export default function ProgressTab() {
         <StatTile
           value={`${stats.currentStreak}`}
           label={t('progress.currentStreak')}
-          icon="🔥"
+          icon="fire"
+          tone="secondary"
         />
         <StatTile
           value={`${stats.longestStreak}`}
           label={t('progress.longestStreak')}
-          icon="🏆"
+          icon="trophy-outline"
+          tone="primary"
         />
         <StatTile
           value={`${stats.totalDone}`}
           label={t('progress.totalDone')}
-          icon="✅"
+          icon="check-circle-outline"
+          tone="tertiary"
         />
         <StatTile
           value={`${stats.completionRate}%`}
           label={t('progress.completionRate')}
-          icon="📊"
+          icon="chart-arc"
+          tone="primary"
         />
       </View>
 
@@ -74,7 +81,7 @@ export default function ProgressTab() {
           <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
             {t('progress.mapTitle')}
           </Text>
-          <FortyDayGrid habit={habit} />
+          <FortyDayGrid habit={habit} showLegend />
         </Card.Content>
       </Card>
     </ScreenScaffold>
@@ -85,12 +92,34 @@ const StatTile = React.memo(function StatTile({
   value,
   label,
   icon,
+  tone,
 }: {
   value: string;
   label: string;
-  icon: string;
+  icon: StatIcon;
+  tone: 'primary' | 'secondary' | 'tertiary';
 }) {
   const theme = useTheme();
+  const { iconBg, iconColor } = (() => {
+    switch (tone) {
+      case 'secondary':
+        return {
+          iconBg: theme.colors.secondaryContainer,
+          iconColor: theme.colors.onSecondaryContainer,
+        };
+      case 'tertiary':
+        return {
+          iconBg: theme.colors.tertiaryContainer,
+          iconColor: theme.colors.onTertiaryContainer,
+        };
+      default:
+        return {
+          iconBg: theme.colors.primaryContainer,
+          iconColor: theme.colors.onPrimaryContainer,
+        };
+    }
+  })();
+
   return (
     <View
       style={[
@@ -98,7 +127,9 @@ const StatTile = React.memo(function StatTile({
         { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
       ]}
     >
-      <Text style={tileStyles.icon}>{icon}</Text>
+      <View style={[tileStyles.iconWrap, { backgroundColor: iconBg }]}>
+        <MaterialCommunityIcons name={icon} size={20} color={iconColor} />
+      </View>
       <Text variant="headlineSmall" style={{ color: theme.colors.onSurface, fontWeight: '800' }}>
         {value}
       </Text>
@@ -124,7 +155,13 @@ const tileStyles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
   },
-  icon: { fontSize: 22 },
+  iconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
