@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Card, Text, useTheme } from 'react-native-paper';
+import { Card, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { AppButton } from '@/components/app-button';
 
 type Props = {
   minimalVersion: string;
@@ -35,13 +36,14 @@ export function MinimumViableCard({ minimalVersion, onAccept }: Props) {
         >
           “{minimalVersion}”
         </Text>
-        <Button
-          mode="contained-tonal"
+        <AppButton
+          variant="secondary"
+          size="small"
           onPress={onAccept}
           style={styles.button}
         >
           {t('home.minimalCard.action')}
-        </Button>
+        </AppButton>
       </Card.Content>
     </Card>
   );

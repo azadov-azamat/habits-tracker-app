@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
+import { OnboardingFooter } from '@/components/onboarding-footer';
+import { AppButton } from '@/components/app-button';
 import { useOnboardingStore } from '@/store/onboarding-store';
 import { useHabitsStore } from '@/store/habits-store';
 import {
@@ -75,7 +77,26 @@ export default function Permissions() {
   }
 
   return (
-    <ScreenScaffold scroll={false}>
+    <ScreenScaffold
+      scroll={false}
+      footer={(
+        <OnboardingFooter
+          nextLabel={t('onboarding.permissions.allow')}
+          loading={submitting}
+          onNext={allow}
+          extraAction={(
+            <AppButton
+              variant="ghost"
+              disabled={submitting}
+              onPress={() => finalize(false)}
+              fullWidth
+            >
+              {t('onboarding.permissions.later')}
+            </AppButton>
+          )}
+        />
+      )}
+    >
       <View style={styles.wrap}>
         <View style={styles.hero}>
           <Text style={styles.emoji}>🔔</Text>
@@ -103,34 +124,14 @@ export default function Permissions() {
             </Text>
           ) : null}
         </View>
-
-        <View style={styles.actions}>
-          <Button
-            mode="contained"
-            loading={submitting}
-            onPress={allow}
-            contentStyle={{ paddingVertical: 6 }}
-            style={{ borderRadius: 999 }}
-          >
-            {t('onboarding.permissions.allow')}
-          </Button>
-          <Button
-            mode="text"
-            disabled={submitting}
-            onPress={() => finalize(false)}
-          >
-            {t('onboarding.permissions.later')}
-          </Button>
-        </View>
       </View>
     </ScreenScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 24, justifyContent: 'space-between' },
+  wrap: { flex: 1, padding: 24, justifyContent: 'center' },
   hero: { alignItems: 'center', gap: 12, marginTop: 40 },
   emoji: { fontSize: 64 },
   title: { textAlign: 'center', fontWeight: '800' },
-  actions: { gap: 8, marginBottom: 12 },
 });

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import type { MilestoneDay } from '@/services/milestone-detector';
+import { AppButton } from '@/components/app-button';
 
 type Props = {
   visible: boolean;
@@ -41,13 +42,13 @@ export function MilestoneModal({ visible, day, onDismiss, onAddNewHabit }: Props
           </Text>
           <View style={styles.actions}>
             {isFinal && onAddNewHabit ? (
-              <Button mode="contained" onPress={onAddNewHabit}>
+              <AppButton onPress={onAddNewHabit}>
                 {t('milestones.day40.newHabit')}
-              </Button>
+              </AppButton>
             ) : null}
-            <Button mode={isFinal ? 'text' : 'contained'} onPress={onDismiss}>
+            <AppButton variant={isFinal ? 'ghost' : 'primary'} onPress={onDismiss}>
               {t('milestones.continue')}
-            </Button>
+            </AppButton>
           </View>
         </Animated.View>
       </Pressable>

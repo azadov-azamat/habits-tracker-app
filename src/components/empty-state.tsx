@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
+import { AppButton } from '@/components/app-button';
 
 type Props = {
   emoji?: string;
@@ -30,9 +31,9 @@ export function EmptyState({ emoji = '🌱', title, body, actionLabel, onAction 
         </Text>
       ) : null}
       {actionLabel && onAction ? (
-        <Button mode="contained" onPress={onAction} style={styles.button}>
+        <AppButton onPress={onAction} style={styles.button}>
           {actionLabel}
-        </Button>
+        </AppButton>
       ) : null}
     </View>
   );
@@ -49,5 +50,5 @@ const styles = StyleSheet.create({
   emoji: { fontSize: 48 },
   title: { textAlign: 'center', fontWeight: '700' },
   body: { textAlign: 'center', lineHeight: 22 },
-  button: { marginTop: 8, borderRadius: 999 },
+  button: { marginTop: 8 },
 });
