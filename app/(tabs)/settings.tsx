@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Alert, Image, Linking, StyleSheet, View } from 'react-native';
 import { Divider, List, Modal, Portal, Switch, Text, useTheme } from 'react-native-paper';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
@@ -13,6 +13,7 @@ import { safeCancelAllNotifications } from '@/services/notifications';
 import { TimePicker } from '@/components/time-interval-picker';
 
 type ThemeChoice = 'system' | 'light' | 'dark';
+const PRIVACY_POLICY_URL = 'https://azadov-azamat.github.io/habits-tracker-app/privacy-policy.html';
 
 export default function SettingsTab() {
   const router = useRouter();
@@ -132,6 +133,21 @@ export default function SettingsTab() {
           onPress={confirmClear}
           titleStyle={{ color: theme.colors.error }}
           left={(p) => <List.Icon {...p} icon="delete-outline" color={theme.colors.error} />}
+          style={styles.item}
+        />
+      </List.Section>
+
+      <List.Section style={styles.section}>
+        <List.Subheader style={styles.subheader}>
+          {t('settings.about')}
+        </List.Subheader>
+        <List.Item
+          title={t('settings.privacyPolicy')}
+          description={t('settings.privacyPolicyDescription')}
+          onPress={() => {
+            void Linking.openURL(PRIVACY_POLICY_URL);
+          }}
+          right={(p) => <List.Icon {...p} icon="open-in-new" />}
           style={styles.item}
         />
       </List.Section>

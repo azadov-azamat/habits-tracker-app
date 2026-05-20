@@ -211,6 +211,8 @@
     "developer": "Dasturchi",
     "openOnboarding": "Onboarding sahifasiga qaytish",
     "about": "Ilova haqida",
+    "privacyPolicy": "Maxfiylik siyosati",
+    "privacyPolicyDescription": "Ma’lumotlar qanday saqlanishini ko‘rish",
     "version": "Versiya"
   },
   "notifications": {
