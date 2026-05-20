@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Image, StyleSheet, View } from 'react-native';
 import { Divider, List, Modal, Portal, Switch, Text, useTheme } from 'react-native-paper';
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
 import { AppButton } from '@/components/app-button';
@@ -14,6 +15,7 @@ import { TimePicker } from '@/components/time-interval-picker';
 type ThemeChoice = 'system' | 'light' | 'dark';
 
 export default function SettingsTab() {
+  const router = useRouter();
   const theme = useTheme();
   const { t } = useTranslation();
   const settings = useSettingsStore();
@@ -133,6 +135,22 @@ export default function SettingsTab() {
           style={styles.item}
         />
       </List.Section>
+
+      {__DEV__ ? (
+        <List.Section style={styles.section}>
+          <List.Subheader style={styles.subheader}>
+            {t('settings.developer')}
+          </List.Subheader>
+          <AppButton
+            variant="secondary"
+            icon="arrow-left-circle-outline"
+            fullWidth
+            onPress={() => router.push('/(onboarding)/welcome')}
+          >
+            {t('settings.openOnboarding')}
+          </AppButton>
+        </List.Section>
+      ) : null}
 
       <View style={styles.about}>
         <Image

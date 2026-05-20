@@ -208,6 +208,8 @@
     "exportData": "Ma’lumotlarni eksport qilish",
     "clearData": "Hammasini tozalash",
     "clearDataConfirm": "Barcha odatlar va tarix o‘chiriladi. Bu amalni ortga qaytarib bo‘lmaydi.",
+    "developer": "Dasturchi",
+    "openOnboarding": "Onboarding sahifasiga qaytish",
     "about": "Ilova haqida",
     "version": "Versiya"
   },
