@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,11 @@ export default function Welcome() {
       <View style={styles.wrap}>
         <View style={styles.nav}>
           <View style={styles.brand}>
-            <Text style={styles.emoji}>🌿</Text>
+            <Image
+              source={require('../../assets/brand/qirqkun-logo.png')}
+              resizeMode="contain"
+              style={styles.logo}
+            />
             <Text
               variant="labelLarge"
               style={{ color: theme.colors.primary, letterSpacing: 1.4 }}
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   brand: { alignItems: 'center', gap: 8 },
-  emoji: { fontSize: 42 },
+  logo: { width: 58, height: 58, borderRadius: 14 },
   themeButton: {
     width: 48,
     height: 40,

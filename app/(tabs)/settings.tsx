@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, View } from 'react-native';
 import { Divider, List, Modal, Portal, Switch, Text, useTheme } from 'react-native-paper';
 import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
@@ -135,6 +135,17 @@ export default function SettingsTab() {
       </List.Section>
 
       <View style={styles.about}>
+        <Image
+          source={require('../../assets/brand/qirqkun-logo.png')}
+          resizeMode="contain"
+          style={styles.aboutLogo}
+        />
+        <Text variant="titleMedium" style={{ color: theme.colors.onBackground, fontWeight: '800' }}>
+          {t('app.name')}
+        </Text>
+        <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center' }}>
+          {t('app.tagline')}
+        </Text>
         <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
           {t('settings.version')}: {Constants.expoConfig?.version ?? '1.0.0'}
         </Text>
@@ -204,7 +215,8 @@ const styles = StyleSheet.create({
   section: { marginVertical: 0 },
   subheader: { paddingHorizontal: 4, fontWeight: '700' },
   item: { paddingHorizontal: 8 },
-  about: { alignItems: 'center', paddingVertical: 16 },
+  about: { alignItems: 'center', paddingVertical: 16, gap: 4 },
+  aboutLogo: { width: 64, height: 64, borderRadius: 16, marginBottom: 4 },
   modal: {
     margin: 20,
     padding: 24,

@@ -5,9 +5,15 @@
     "owner": "azamat_azadov",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "scheme": "qirqkun",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FBF7F1"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -29,15 +35,29 @@
       }
     },
     "android": {
-      "package": "uz.qirqkun.app"
+      "package": "uz.qirqkun.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FBF7F1"
+      }
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "output": "static",
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
       "expo-updates",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#FBF7F1"
+        }
+      ],
       [
         "expo-notifications",
         {
