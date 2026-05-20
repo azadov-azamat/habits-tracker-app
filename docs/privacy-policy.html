@@ -87,20 +87,18 @@
       .brand {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 14px;
         color: var(--primary);
         font-weight: 800;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
       }
 
-      .mark {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        background:
-          radial-gradient(circle at 70% 68%, #ff9d4d 0 10%, transparent 11%),
-          linear-gradient(135deg, #3dc97a, #7c4dff);
+      .brand-logo {
+        display: block;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
       }
 
       .language-switcher {
@@ -153,7 +151,16 @@
     <main>
       <article>
         <div class="topbar">
-          <div class="brand"><span class="mark"></span>40 Kun</div>
+          <div class="brand">
+            <img
+              class="brand-logo"
+              src="./assets/qirqkun-logo.png"
+              alt="40 Kun logo"
+              width="56"
+              height="56"
+            />
+            <span>40 Kun</span>
+          </div>
           <nav class="language-switcher" aria-label="Language selector">
             <button type="button" data-lang-button="uz" aria-pressed="true">O‘zbekcha</button>
             <button type="button" data-lang-button="en" aria-pressed="false">English</button>
