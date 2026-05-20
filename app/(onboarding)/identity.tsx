@@ -6,13 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
 import { OnboardingFooter } from '@/components/onboarding-footer';
 import { PreviewCard } from '@/components/preview-card';
-import { identityExamples } from '@/data/identity-examples';
+import { identityExamplesByLanguage } from '@/data/identity-examples';
 import { useOnboardingStore } from '@/store/onboarding-store';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function Identity() {
   const router = useRouter();
   const theme = useTheme();
   const { t } = useTranslation();
+  const language = useSettingsStore((s) => s.language);
   const draft = useOnboardingStore((s) => s.draft);
   const setDraft = useOnboardingStore((s) => s.setDraft);
   const value = draft.identity ?? '';
@@ -23,6 +25,7 @@ export default function Identity() {
   );
 
   const previewValue = value || t('onboarding.identity.templatePlaceholder');
+  const examples = identityExamplesByLanguage[language];
 
   return (
     <ScreenScaffold
@@ -60,7 +63,7 @@ export default function Identity() {
       />
 
       <View style={styles.chips}>
-        {identityExamples.map((ex) => (
+        {examples.map((ex) => (
           <Pressable
             key={ex}
             onPress={() => updateIdentity(ex)}

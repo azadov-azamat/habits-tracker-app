@@ -1,3 +1,4 @@
+import en from '@/i18n/locales/en.json';
 import uz from '@/i18n/locales/uz.json';
 
 const REQUIRED_PATHS = [
@@ -59,6 +60,9 @@ const REQUIRED_PATHS = [
   'milestones.day40.title',
   'milestones.continue',
   'settings.title',
+  'settings.language',
+  'settings.languageUz',
+  'settings.languageEn',
   'settings.theme',
   'settings.notifications',
   'settings.clearData',
@@ -79,10 +83,13 @@ function pluck(obj: Record<string, unknown>, path: string): unknown {
   }, obj);
 }
 
-describe('uz.json', () => {
+describe.each([
+  ['uz.json', uz],
+  ['en.json', en],
+])('%s', (_name, locale) => {
   for (const path of REQUIRED_PATHS) {
     it(`provides "${path}"`, () => {
-      const v = pluck(uz as unknown as Record<string, unknown>, path);
+      const v = pluck(locale as unknown as Record<string, unknown>, path);
       expect(typeof v).toBe('string');
       expect((v as string).length).toBeGreaterThan(0);
     });
@@ -90,8 +97,8 @@ describe('uz.json', () => {
 
   it('milestones have title and body for each day', () => {
     for (const day of [1, 7, 14, 21, 30, 40]) {
-      expect(pluck(uz as unknown as Record<string, unknown>, `milestones.day${day}.title`)).toBeTruthy();
-      expect(pluck(uz as unknown as Record<string, unknown>, `milestones.day${day}.body`)).toBeTruthy();
+      expect(pluck(locale as unknown as Record<string, unknown>, `milestones.day${day}.title`)).toBeTruthy();
+      expect(pluck(locale as unknown as Record<string, unknown>, `milestones.day${day}.body`)).toBeTruthy();
     }
   });
 });

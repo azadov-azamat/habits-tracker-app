@@ -7,23 +7,26 @@ import { ScreenScaffold } from '@/components/screen-scaffold';
 import { OnboardingFooter } from '@/components/onboarding-footer';
 import { PreviewCard } from '@/components/preview-card';
 import { useOnboardingStore } from '@/store/onboarding-store';
-import { habitSuggestions } from '@/data/habit-suggestions';
+import { habitSuggestionsByLanguage } from '@/data/habit-suggestions';
 import { emojiOptions } from '@/data/identity-examples';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function HabitScreen() {
   const router = useRouter();
   const theme = useTheme();
   const { t } = useTranslation();
+  const language = useSettingsStore((s) => s.language);
   const draft = useOnboardingStore((s) => s.draft);
   const setDraft = useOnboardingStore((s) => s.setDraft);
   const name = draft.name ?? '';
   const emoji = draft.emoji ?? '🌱';
   const canContinue = name.trim().length >= 3;
+  const suggestions = habitSuggestionsByLanguage[language];
 
   const updateName = useCallback((value: string) => setDraft({ name: value }), [setDraft]);
   const updateEmoji = useCallback((value: string) => setDraft({ emoji: value }), [setDraft]);
   const applySuggestion = useCallback(
-    (s: (typeof habitSuggestions)[number]) => {
+    (s: (typeof suggestions)[number]) => {
       setDraft({
         name: s.name,
         emoji: s.emoji,
@@ -109,7 +112,7 @@ export default function HabitScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {habitSuggestions.map((s) => (
+          {suggestions.map((s) => (
             <Pressable
               key={s.name}
               onPress={() => applySuggestion(s)}

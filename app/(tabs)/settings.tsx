@@ -11,8 +11,10 @@ import { useHabitsStore } from '@/store/habits-store';
 import { useOnboardingStore } from '@/store/onboarding-store';
 import { safeCancelAllNotifications } from '@/services/notifications';
 import { TimePicker } from '@/components/time-interval-picker';
+import type { LanguageMode } from '@/store/types';
 
 type ThemeChoice = 'system' | 'light' | 'dark';
+type LanguageChoice = LanguageMode;
 const PRIVACY_POLICY_URL = 'https://azadov-azamat.github.io/habits-tracker-app/privacy-policy.html';
 
 export default function SettingsTab() {
@@ -24,8 +26,11 @@ export default function SettingsTab() {
   const onboardingReset = useOnboardingStore((s) => s.reset);
 
   const [themePickerOpen, setThemePickerOpen] = useState(false);
+  const [languagePickerOpen, setLanguagePickerOpen] = useState(false);
   const [timePickerOpen, setTimePickerOpen] = useState(false);
 
+  const languageLabel =
+    settings.language === 'en' ? t('settings.languageEn') : t('settings.languageUz');
   const themeLabel =
     settings.theme === 'light'
       ? t('settings.themeLight')
@@ -63,6 +68,14 @@ export default function SettingsTab() {
         <List.Subheader style={styles.subheader}>
           {t('settings.appearance')}
         </List.Subheader>
+        <List.Item
+          title={t('settings.language')}
+          description={languageLabel}
+          onPress={() => setLanguagePickerOpen(true)}
+          right={(p) => <List.Icon {...p} icon="chevron-right" />}
+          style={styles.item}
+        />
+        <Divider />
         <List.Item
           title={t('settings.theme')}
           description={themeLabel}
@@ -145,7 +158,7 @@ export default function SettingsTab() {
           title={t('settings.privacyPolicy')}
           description={t('settings.privacyPolicyDescription')}
           onPress={() => {
-            void Linking.openURL(PRIVACY_POLICY_URL);
+            void Linking.openURL(`${PRIVACY_POLICY_URL}?lang=${settings.language}`);
           }}
           right={(p) => <List.Icon {...p} icon="open-in-new" />}
           style={styles.item}
@@ -212,6 +225,37 @@ export default function SettingsTab() {
                 onPress={() => {
                   settings.setTheme(option);
                   setThemePickerOpen(false);
+                }}
+                right={(p) =>
+                  selected ? <List.Icon {...p} icon="check" color={theme.colors.primary} /> : null
+                }
+                style={styles.modalItem}
+              />
+            );
+          })}
+        </Modal>
+
+        <Modal
+          visible={languagePickerOpen}
+          onDismiss={() => setLanguagePickerOpen(false)}
+          contentContainerStyle={[
+            styles.modal,
+            { backgroundColor: theme.colors.surface },
+          ]}
+        >
+          <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+            {t('settings.language')}
+          </Text>
+          {(['uz', 'en'] as LanguageChoice[]).map((option) => {
+            const label = option === 'en' ? t('settings.languageEn') : t('settings.languageUz');
+            const selected = settings.language === option;
+            return (
+              <List.Item
+                key={option}
+                title={label}
+                onPress={() => {
+                  settings.setLanguage(option);
+                  setLanguagePickerOpen(false);
                 }}
                 right={(p) =>
                   selected ? <List.Icon {...p} icon="check" color={theme.colors.primary} /> : null

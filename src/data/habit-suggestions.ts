@@ -1,3 +1,5 @@
+import type { SupportedLocale } from '@/i18n';
+
 export type HabitSuggestion = {
   emoji: string;
   name: string;
@@ -92,3 +94,93 @@ export const habitSuggestions: HabitSuggestion[] = [
     minimalExample: '10 daqiqa yurish',
   },
 ];
+
+export const habitSuggestionsByLanguage: Record<SupportedLocale, HabitSuggestion[]> = {
+  uz: habitSuggestions,
+  en: [
+    {
+      emoji: '💧',
+      name: 'Drink 8 glasses of water every day',
+      identity: 'a healthy person',
+      whyExample: 'For my health and energy',
+      minimalExample: 'Drink at least 1 glass of water',
+    },
+    {
+      emoji: '📖',
+      name: 'Read for 10 minutes every day',
+      identity: 'a knowledgeable person',
+      whyExample: 'To enrich my mind and broaden my view of the world',
+      minimalExample: 'Read 1 page',
+    },
+    {
+      emoji: '🏃',
+      name: 'Move for 15 minutes every day',
+      identity: 'an active person',
+      whyExample: 'So my body feels strong and my mood stays high',
+      minimalExample: 'Do 5 squats or walk for 2 minutes',
+    },
+    {
+      emoji: '🧘',
+      name: 'Meditate for 5 minutes',
+      identity: 'a calm and mindful person',
+      whyExample: 'To reduce stress and focus my attention',
+      minimalExample: 'Take 1 minute of deep breaths',
+    },
+    {
+      emoji: '🤲',
+      name: 'Pray on time',
+      identity: 'a spiritually disciplined person',
+      whyExample: 'For spiritual clarity and closeness to Allah',
+      minimalExample: 'Pray one prayer on time',
+    },
+    {
+      emoji: '📔',
+      name: 'Write a daily journal',
+      identity: 'a mindful person',
+      whyExample: 'To organize my thoughts and understand myself better',
+      minimalExample: 'Write 1 sentence',
+    },
+    {
+      emoji: '🌱',
+      name: 'Sleep 8 hours',
+      identity: 'a well-rested and healthy person',
+      whyExample: 'So I wake up with energy tomorrow',
+      minimalExample: 'Start getting ready for bed at 11:00 PM',
+    },
+    {
+      emoji: '🚫',
+      name: 'Spend 1 hour without my phone',
+      identity: 'a focused person',
+      whyExample: 'To reclaim my time and pay more attention to life',
+      minimalExample: 'Put my phone in another room for 15 minutes',
+    },
+    {
+      emoji: '🥗',
+      name: 'Eat healthier',
+      identity: 'a physically healthy person',
+      whyExample: 'To give my body useful energy',
+      minimalExample: 'Eat one piece of fruit',
+    },
+    {
+      emoji: '✍️',
+      name: 'Learn a new language',
+      identity: 'a person who keeps growing',
+      whyExample: 'For new opportunities and a broader worldview',
+      minimalExample: 'Learn 5 new words',
+    },
+    {
+      emoji: '🙏',
+      name: 'Practice gratitude',
+      identity: 'a grateful person',
+      whyExample: 'To notice the good things in life',
+      minimalExample: 'Write down 1 thing I am grateful for',
+    },
+    {
+      emoji: '🚶',
+      name: 'Walk 10,000 steps',
+      identity: 'an active and healthy person',
+      whyExample: 'For my heart and mind to work well',
+      minimalExample: 'Walk for 10 minutes',
+    },
+  ],
+};

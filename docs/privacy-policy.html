@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>40 Kun Maxfiylik siyosati</title>
+    <title>40 Kun Privacy Policy</title>
     <meta
       name="description"
-      content="40 Kun mobil ilovasi uchun maxfiylik siyosati."
+      content="Privacy policy for the 40 Kun mobile app in Uzbek and English."
     />
     <style>
       :root {
@@ -16,6 +16,7 @@
         --ink: #1f1a2e;
         --muted: #5a5468;
         --primary: #7c4dff;
+        --primary-soft: #ede5ff;
         --line: #ede7f2;
       }
 
@@ -34,7 +35,7 @@
       }
 
       main {
-        width: min(880px, calc(100% - 32px));
+        width: min(900px, calc(100% - 32px));
         margin: 0 auto;
         padding: 48px 0;
       }
@@ -75,16 +76,18 @@
         color: var(--primary);
       }
 
-      .meta {
-        margin: 0 0 28px;
-        color: var(--muted);
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
       }
 
       .brand {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 18px;
         color: var(--primary);
         font-weight: 800;
         letter-spacing: 0.08em;
@@ -99,89 +102,248 @@
           radial-gradient(circle at 70% 68%, #ff9d4d 0 10%, transparent 11%),
           linear-gradient(135deg, #3dc97a, #7c4dff);
       }
+
+      .language-switcher {
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .language-switcher button {
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        padding: 8px 14px;
+      }
+
+      .language-switcher button[aria-pressed="true"] {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .meta {
+        margin: 0 0 28px;
+        color: var(--muted);
+      }
+
+      [data-policy] {
+        display: none;
+      }
+
+      [data-policy].active {
+        display: block;
+      }
+
+      @media (max-width: 640px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
     </style>
   </head>
   <body>
     <main>
       <article>
-        <div class="brand"><span class="mark"></span>40 Kun</div>
-        <h1>Maxfiylik siyosati</h1>
-        <p class="meta">Oxirgi yangilanish: 20-may, 2026</p>
+        <div class="topbar">
+          <div class="brand"><span class="mark"></span>40 Kun</div>
+          <nav class="language-switcher" aria-label="Language selector">
+            <button type="button" data-lang-button="uz" aria-pressed="true">O‘zbekcha</button>
+            <button type="button" data-lang-button="en" aria-pressed="false">English</button>
+          </nav>
+        </div>
 
-        <p>
-          40 Kun — 40 kunlik odat shakllantirishga yordam beruvchi offline-first
-          mobil ilova. Ushbu siyosat ilova foydalanuvchi ma'lumotlariga qanday
-          munosabatda bo'lishini tushuntiradi.
-        </p>
+        <section data-policy="uz" class="active" lang="uz">
+          <h1>Maxfiylik siyosati</h1>
+          <p class="meta">Oxirgi yangilanish: 20-may, 2026</p>
 
-        <h2>Qisqa mazmun</h2>
-        <p>
-          Ilova hisob yaratishni talab qilmaydi, reklama yoki analytics ishlatmaydi
-          va odatlaringizni bizning serverlarga yubormaydi. Odat nomlari, sabablar,
-          reja, check-in tarixi, eslatma sozlamalari va boshqa ilova ma'lumotlari
-          qurilmangizda lokal saqlanadi.
-        </p>
+          <p>
+            40 Kun — 40 kunlik odat shakllantirishga yordam beruvchi offline-first
+            mobil ilova. Ushbu siyosat ilova foydalanuvchi ma'lumotlariga qanday
+            munosabatda bo'lishini tushuntiradi.
+          </p>
 
-        <h2>Qanday ma'lumotlar saqlanadi</h2>
-        <p>Ilova ishlashi uchun quyidagi ma'lumotlarni qurilmangizda saqlashi mumkin:</p>
-        <ul>
-          <li>tanlangan asosiy odat va mikro odatlar;</li>
-          <li>odatga bog'langan emoji, shaxsiyat jumlasi, sabab va kundalik reja;</li>
-          <li>check-in tarixi, ketma-ketlik va milestone holatlari;</li>
-          <li>eslatma vaqti, snooze sozlamalari, mavzu va haptic sozlamalari;</li>
-          <li>ixtiyoriy yozilgan fikr-mulohazalar yoki qaydlar.</li>
-        </ul>
+          <h2>Qisqa mazmun</h2>
+          <p>
+            Ilova hisob yaratishni talab qilmaydi, reklama yoki analytics ishlatmaydi
+            va odatlaringizni bizning serverlarga yubormaydi. Odat nomlari, sabablar,
+            reja, check-in tarixi, eslatma sozlamalari va boshqa ilova ma'lumotlari
+            qurilmangizda lokal saqlanadi.
+          </p>
 
-        <h2>Ma'lumotlar qayerda saqlanadi</h2>
-        <p>
-          Ma'lumotlar qurilmangizning lokal xotirasida saqlanadi. 40 Kun hozircha
-          foydalanuvchi akkaunti, cloud sync yoki tashqi ma'lumotlar bazasidan
-          foydalanmaydi.
-        </p>
+          <h2>Qanday ma'lumotlar saqlanadi</h2>
+          <p>Ilova ishlashi uchun quyidagi ma'lumotlarni qurilmangizda saqlashi mumkin:</p>
+          <ul>
+            <li>tanlangan asosiy odat va mikro odatlar;</li>
+            <li>odatga bog'langan emoji, shaxsiyat jumlasi, sabab va kundalik reja;</li>
+            <li>check-in tarixi, ketma-ketlik va milestone holatlari;</li>
+            <li>eslatma vaqti, snooze sozlamalari, mavzu va haptic sozlamalari;</li>
+            <li>ixtiyoriy yozilgan fikr-mulohazalar yoki qaydlar.</li>
+          </ul>
 
-        <h2>Bildirishnomalar</h2>
-        <p>
-          Agar ruxsat bersangiz, ilova odatlarni eslatish uchun lokal
-          bildirishnomalardan foydalanadi. Bildirishnoma ruxsatini istalgan payt
-          telefon sozlamalaridan o'chirishingiz mumkin.
-        </p>
+          <h2>Ma'lumotlar qayerda saqlanadi</h2>
+          <p>
+            Ma'lumotlar qurilmangizning lokal xotirasida saqlanadi. 40 Kun hozircha
+            foydalanuvchi akkaunti, cloud sync yoki tashqi ma'lumotlar bazasidan
+            foydalanmaydi.
+          </p>
 
-        <h2>Uchinchi tomon xizmatlari</h2>
-        <p>
-          Ilova Google Play, Expo va operatsion tizim xizmatlari orqali tarqatilishi
-          yoki yangilanishi mumkin. Bu xizmatlar o'z texnik loglari va siyosatlariga
-          ega bo'lishi mumkin. 40 Kun ilova ichida reklama tarmoqlari yoki tracking
-          analytics qo'shmaydi.
-        </p>
+          <h2>Bildirishnomalar</h2>
+          <p>
+            Agar ruxsat bersangiz, ilova odatlarni eslatish uchun lokal
+            bildirishnomalardan foydalanadi. Bildirishnoma ruxsatini istalgan payt
+            telefon sozlamalaridan o'chirishingiz mumkin.
+          </p>
 
-        <h2>Ma'lumotlarni o'chirish</h2>
-        <p>
-          Ilova ichidagi Sozlamalar bo'limida barcha lokal odatlar va tarixni
-          tozalash mumkin. Ilovani qurilmadan o'chirish ham lokal ilova
-          ma'lumotlarini olib tashlaydi.
-        </p>
+          <h2>Uchinchi tomon xizmatlari</h2>
+          <p>
+            Ilova Google Play, Expo va operatsion tizim xizmatlari orqali tarqatilishi
+            yoki yangilanishi mumkin. Bu xizmatlar o'z texnik loglari va siyosatlariga
+            ega bo'lishi mumkin. 40 Kun ilova ichida reklama tarmoqlari yoki tracking
+            analytics qo'shmaydi.
+          </p>
 
-        <h2>Bolalar maxfiyligi</h2>
-        <p>
-          Ilova bolalardan ataylab shaxsiy ma'lumot yig'ish uchun mo'ljallanmagan.
-          Agar ota-ona yoki vasiy bolaga oid ma'lumot noto'g'ri saqlangan deb
-          hisoblasa, ilova ma'lumotlarini qurilmadan o'chirishi mumkin.
-        </p>
+          <h2>Ma'lumotlarni o'chirish</h2>
+          <p>
+            Ilova ichidagi Sozlamalar bo'limida barcha lokal odatlar va tarixni
+            tozalash mumkin. Ilovani qurilmadan o'chirish ham lokal ilova
+            ma'lumotlarini olib tashlaydi.
+          </p>
 
-        <h2>O'zgarishlar</h2>
-        <p>
-          Ushbu maxfiylik siyosati vaqti-vaqti bilan yangilanishi mumkin.
-          Yangilangan versiyada sahifadagi sana o'zgartiriladi.
-        </p>
+          <h2>Bolalar maxfiyligi</h2>
+          <p>
+            Ilova bolalardan ataylab shaxsiy ma'lumot yig'ish uchun mo'ljallanmagan.
+            Agar ota-ona yoki vasiy bolaga oid ma'lumot noto'g'ri saqlangan deb
+            hisoblasa, ilova ma'lumotlarini qurilmadan o'chirishi mumkin.
+          </p>
 
-        <h2>Aloqa</h2>
-        <p>
-          Savollar uchun GitHub orqali murojaat qilishingiz mumkin:
-          <a href="https://github.com/azadov-azamat/habits-tracker-app/issues">
-            github.com/azadov-azamat/habits-tracker-app/issues
-          </a>
-        </p>
+          <h2>O'zgarishlar</h2>
+          <p>
+            Ushbu maxfiylik siyosati vaqti-vaqti bilan yangilanishi mumkin.
+            Yangilangan versiyada sahifadagi sana o'zgartiriladi.
+          </p>
+
+          <h2>Aloqa</h2>
+          <p>
+            Savollar uchun GitHub orqali murojaat qilishingiz mumkin:
+            <a href="https://github.com/azadov-azamat/habits-tracker-app/issues">
+              github.com/azadov-azamat/habits-tracker-app/issues
+            </a>
+          </p>
+        </section>
+
+        <section data-policy="en" lang="en">
+          <h1>Privacy Policy</h1>
+          <p class="meta">Last updated: May 20, 2026</p>
+
+          <p>
+            40 Kun is an offline-first mobile app that helps users build a habit
+            over a 40-day chilla journey. This policy explains how the app handles
+            user information.
+          </p>
+
+          <h2>Summary</h2>
+          <p>
+            The app does not require an account, does not use ads or analytics, and
+            does not send your habit data to our servers. Habit names, reasons,
+            plans, check-in history, reminder settings, and other app data are stored
+            locally on your device.
+          </p>
+
+          <h2>Information stored by the app</h2>
+          <p>The app may store the following information on your device:</p>
+          <ul>
+            <li>your selected main habit and optional micro habits;</li>
+            <li>habit emoji, identity statement, reason, and daily plan;</li>
+            <li>check-in history, streaks, and milestone status;</li>
+            <li>reminder time, snooze settings, theme, and haptic settings;</li>
+            <li>optional reflections or notes you choose to write.</li>
+          </ul>
+
+          <h2>Where data is stored</h2>
+          <p>
+            Your data is stored in local storage on your device. 40 Kun currently
+            does not use user accounts, cloud sync, or an external user database.
+          </p>
+
+          <h2>Notifications</h2>
+          <p>
+            If you grant permission, the app uses local notifications to remind you
+            about your habits. You can disable notification permission at any time in
+            your phone settings.
+          </p>
+
+          <h2>Third-party services</h2>
+          <p>
+            The app may be distributed or updated through Google Play, Expo, and
+            operating system services. These services may have their own technical
+            logs and privacy policies. 40 Kun does not add advertising networks or
+            tracking analytics inside the app.
+          </p>
+
+          <h2>Deleting data</h2>
+          <p>
+            You can clear all local habits and history from the Settings section in
+            the app. Uninstalling the app from your device also removes local app
+            data.
+          </p>
+
+          <h2>Children’s privacy</h2>
+          <p>
+            The app is not designed to knowingly collect personal information from
+            children. If a parent or guardian believes child-related information has
+            been stored unintentionally, they can delete the app data from the device.
+          </p>
+
+          <h2>Changes</h2>
+          <p>
+            This privacy policy may be updated from time to time. When it changes,
+            the date on this page will be updated.
+          </p>
+
+          <h2>Contact</h2>
+          <p>
+            For questions, contact us through GitHub:
+            <a href="https://github.com/azadov-azamat/habits-tracker-app/issues">
+              github.com/azadov-azamat/habits-tracker-app/issues
+            </a>
+          </p>
+        </section>
       </article>
     </main>
+
+    <script>
+      const policies = document.querySelectorAll("[data-policy]");
+      const buttons = document.querySelectorAll("[data-lang-button]");
+      const params = new URLSearchParams(window.location.search);
+      const initialLang = params.get("lang") === "en" ? "en" : "uz";
+
+      function setLanguage(lang) {
+        document.documentElement.lang = lang;
+        policies.forEach((policy) => {
+          policy.classList.toggle("active", policy.dataset.policy === lang);
+        });
+        buttons.forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.langButton === lang));
+        });
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("lang", lang);
+        window.history.replaceState({}, "", url);
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => setLanguage(button.dataset.langButton));
+      });
+
+      setLanguage(initialLang);
+    </script>
   </body>
 </html>

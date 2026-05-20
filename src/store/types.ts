@@ -37,9 +37,11 @@ export type CreateHabitInput = Omit<
 >;
 
 export type ThemeMode = 'system' | 'light' | 'dark';
+export type LanguageMode = 'uz' | 'en';
 
 export type AppSettings = {
   theme: ThemeMode;
+  language: LanguageMode;
   notificationsEnabled: boolean;
   morningGreetingEnabled: boolean;
   morningGreetingTime: string;

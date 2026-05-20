@@ -9,6 +9,8 @@ describe('motivationalQuotes', () => {
     for (const q of quotes) {
       expect(typeof q.text).toBe('string');
       expect(q.text.length).toBeGreaterThan(0);
+      expect(typeof q.textEn).toBe('string');
+      expect(q.textEn.length).toBeGreaterThan(0);
     }
   });
 
@@ -23,6 +25,14 @@ describe('motivationalQuotes', () => {
     it('returns a quote', () => {
       const q = pickQuoteForDay('2026-05-18');
       expect(q.text).toBeTruthy();
+    });
+
+    it('returns localized quote text', () => {
+      const uz = pickQuoteForDay('2026-05-18', 'uz');
+      const en = pickQuoteForDay('2026-05-18', 'en');
+      expect(en.text).toBeTruthy();
+      expect(en.text).toBe(en.textEn);
+      expect(en.text).not.toBe(uz.text);
     });
 
     it('is deterministic for the same date', () => {

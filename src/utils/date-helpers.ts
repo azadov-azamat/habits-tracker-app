@@ -1,5 +1,6 @@
 import { differenceInCalendarDays, format, parseISO } from 'date-fns';
-import { uz } from 'date-fns/locale';
+import { enUS, uz } from 'date-fns/locale';
+import type { SupportedLocale } from '@/i18n';
 
 export type DateKey = string;
 
@@ -65,4 +66,12 @@ export function parseTime(time: string): { hour: number; minute: number } {
 
 export function formatDateUz(key: DateKey): string {
   return format(fromDateKey(key), 'd MMMM yyyy', { locale: uz }).toLocaleLowerCase('uz-UZ');
+}
+
+export function formatDateLocalized(key: DateKey, locale: SupportedLocale): string {
+  if (locale === 'en') {
+    return format(fromDateKey(key), 'MMMM d, yyyy', { locale: enUS });
+  }
+
+  return formatDateUz(key);
 }

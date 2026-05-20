@@ -4,6 +4,7 @@ import { Portal, Modal, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { pickQuoteForDay } from '@/data/motivational-quotes';
 import { todayKey } from '@/utils/date-helpers';
+import { useSettingsStore } from '@/store/settings-store';
 
 type Props = {
   variant?: 'link' | 'inline';
@@ -12,7 +13,8 @@ type Props = {
 export function MotivationCard({ variant = 'link' }: Props) {
   const theme = useTheme();
   const { t } = useTranslation();
-  const quote = useMemo(() => pickQuoteForDay(todayKey()), []);
+  const language = useSettingsStore((s) => s.language);
+  const quote = useMemo(() => pickQuoteForDay(todayKey(), language), [language]);
   const [open, setOpen] = useState(false);
 
   if (variant === 'inline') {

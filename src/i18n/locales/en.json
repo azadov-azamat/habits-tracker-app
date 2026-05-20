@@ -1,0 +1,252 @@
+{
+  "app": {
+    "name": "40 Kun",
+    "tagline": "Chilla — habit-building app"
+  },
+  "common": {
+    "next": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "done": "Done",
+    "yes": "Yes",
+    "no": "No",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "day": "day",
+    "days": "days",
+    "of": "of",
+    "minutes": "minutes",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try again"
+  },
+  "errors": {
+    "habitAction": "The action could not be completed. Please try again.",
+    "notifications": "There was a problem with reminder settings. Your habit was saved, and you can enable reminders again later.",
+    "persistence": "There was a problem saving data. Internet is not required, but please try again.",
+    "startup": "The app started, but some settings could not be restored."
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome",
+      "headline": "A 40-day chilla toward a new habit",
+      "body": "Research shows that consistent repetition helps turn intentional actions into habits. In our tradition, chilla is a 40-day period for growth and change. Let’s walk this path together.",
+      "start": "Start"
+    },
+    "identity": {
+      "title": "What kind of person do you want to become?",
+      "subtitle": "Habits are not just actions — they reflect the person you are becoming.",
+      "label": "Complete the sentence:",
+      "placeholder": "for example: a healthy person",
+      "hint": "Examples: disciplined, healthy, knowledgeable, patient, kind",
+      "template": "I am becoming {{value}}",
+      "templatePlaceholder": "___"
+    },
+    "habit": {
+      "title": "Which habit will we build?",
+      "subtitle": "Choose one clear, small habit. Big change begins with a small step.",
+      "nameLabel": "Habit name",
+      "namePlaceholder": "for example: Drink 8 glasses of water every day",
+      "emojiLabel": "Choose an emoji",
+      "suggestionsTitle": "Or choose a suggested habit:"
+    },
+    "why": {
+      "title": "Why does this habit matter to you?",
+      "subtitle": "On difficult days, this answer will give you strength. Write from the heart.",
+      "placeholder": "for example: For my health and energy..."
+    },
+    "intention": {
+      "title": "When will you do this habit?",
+      "subtitle": "A clear plan makes the habit easier to remember: “If X happens, I will do Y.”",
+      "whenLabel": "When? (time or after which activity)",
+      "whenPlaceholder": "for example: after I wake up in the morning",
+      "thenLabel": "What will you do?",
+      "thenPlaceholder": "for example: I will drink 1 glass of water",
+      "preview": "Your plan:",
+      "templateWhen": "If",
+      "templateThen": "I will",
+      "templatePlaceholder": "___",
+      "minimalLabel": "The easiest version (for hard days)",
+      "minimalPlaceholder": "for example: drink at least one sip of water",
+      "minimalHint": "This is the “2-minute rule”: even when you have little energy, you can still do the smallest version of your habit."
+    },
+    "schedule": {
+      "title": "When should I remind you?",
+      "subtitle": "A consistent time is one of the keys to habit formation.",
+      "timeLabel": "Reminder time",
+      "intervalLabel": "If you do not complete it, after how many minutes should I remind you again?",
+      "maxSnoozesLabel": "What is the maximum number of reminders per day?",
+      "intervalHint": "When you tap “Done” on a reminder, the remaining reminders for that day stop."
+    },
+    "permissions": {
+      "title": "Reminder permission",
+      "subtitle": "We need permission to send you a gentle reminder at your chosen time.",
+      "body": "If you do not allow notifications, reminders will not work. They play an important role in building a habit.",
+      "allow": "Allow",
+      "later": "Later",
+      "denied": "Permission was denied. You can enable it in your phone settings."
+    }
+  },
+  "home": {
+    "greetingMorning": "Good morning",
+    "greetingDay": "Good day",
+    "greetingEvening": "Good evening",
+    "greetingNight": "Good night",
+    "dayCounter": "Day {{day}} / 40",
+    "saplingA11y": "Your sapling — day {{day}} of {{total}}",
+    "remainingDays": "{{count}} days left",
+    "todayQuestion": "Did you complete today’s habit?",
+    "checkIn": "Done",
+    "alreadyDone": "Done today ✅",
+    "undo": "Undo",
+    "whyTitle": "Remember why",
+    "intentionTitle": "Your plan",
+    "microHabitsTitle": "Micro habits",
+    "addMicroHabit": "Add micro habit",
+    "noteLabel": "Today’s reflection (optional)",
+    "notePlaceholder": "How did you feel today?",
+    "emptyTitle": "No main habit found",
+    "emptyBody": "Go through onboarding to start a new 40-day chilla.",
+    "microEmpty": "Micro habits are optional. You can add them when you are ready.",
+    "minimalCard": {
+      "title": "Is today feeling hard?",
+      "body": "It does not have to be perfect. Try the easiest version:",
+      "action": "This counts too"
+    },
+    "missedCard": {
+      "title": "You missed one day",
+      "body": "That is normal — nobody is perfect. What matters is continuing today.",
+      "action": "Start again today"
+    },
+    "twoMissedCard": {
+      "title": "Has something become difficult?",
+      "body": "Maybe the time does not fit, or the habit is too large. Would you like to adjust it?",
+      "adjustTime": "Change time",
+      "useMinimal": "Use the easiest version"
+    }
+  },
+  "progress": {
+    "title": "Roadmap",
+    "emptyBody": "No main habit has been chosen yet.",
+    "mapTitle": "Chilla map",
+    "currentStreak": "Current streak",
+    "longestStreak": "Longest streak",
+    "totalDone": "Total completed",
+    "completionRate": "Completion rate",
+    "gridLegend": {
+      "done": "Done",
+      "today": "Today",
+      "missed": "Missed",
+      "upcoming": "Upcoming"
+    },
+    "weeklyReflection": {
+      "title": "Weekly reflection",
+      "question": "How did this week go? What helped, and what was difficult?",
+      "save": "Save"
+    }
+  },
+  "habit": {
+    "details": "Habit details",
+    "notFound": "Habit not found.",
+    "since": "Started",
+    "newMicroHabit": "New micro habit",
+    "planLabel": "Plan",
+    "planPrefix": "When",
+    "planMiddle": "I will",
+    "easiestVersion": "Easiest version",
+    "microLimitReached": "You can add up to 2 micro habits",
+    "pause": "Pause",
+    "resume": "Resume",
+    "delete": "Delete habit",
+    "deleteConfirm": "This habit and its history will be permanently deleted. Are you sure?",
+    "edit": "Edit"
+  },
+  "milestones": {
+    "day1": {
+      "title": "First step!",
+      "body": "The hardest part is starting. You did it. 🌱"
+    },
+    "day7": {
+      "title": "1 week!",
+      "body": "One week is a real win. A new path is starting to form in your mind. 🔥"
+    },
+    "day14": {
+      "title": "2 weeks!",
+      "body": "Half a month has passed. You may already feel this habit becoming easier. ✨"
+    },
+    "day21": {
+      "title": "3 weeks!",
+      "body": "The traditional 21-day milestone is behind you. But you keep going — the chilla continues. 🚀"
+    },
+    "day30": {
+      "title": "30 days!",
+      "body": "A full month! This habit is becoming part of your life. Only 10 days left. 🎯"
+    },
+    "day40": {
+      "title": "Chilla complete!",
+      "body": "Over 40 days, you shaped a new quality in yourself. You did it! 🏆",
+      "newHabit": "Start a new habit",
+      "continue": "Keep going"
+    },
+    "continue": "I’ll continue",
+    "share": "Share achievement"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "languageUz": "O‘zbekcha",
+    "languageEn": "English",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "notifications": "Reminders",
+    "notificationsEnabled": "Reminders enabled",
+    "morningGreeting": "Morning reminder",
+    "morningGreetingTime": "Reminder time",
+    "haptics": "Haptics",
+    "data": "Data",
+    "exportData": "Export data",
+    "clearData": "Clear everything",
+    "clearDataConfirm": "All habits and history will be deleted. This action cannot be undone.",
+    "developer": "Developer",
+    "openOnboarding": "Return to onboarding",
+    "about": "About",
+    "privacyPolicy": "Privacy policy",
+    "privacyPolicyDescription": "See how data is stored",
+    "version": "Version"
+  },
+  "notifications": {
+    "channel": {
+      "name": "Habit reminders",
+      "description": "Reminds you about your habit at the scheduled time"
+    },
+    "reminder": {
+      "title": "{{emoji}} {{habitName}}",
+      "body": "Day {{day}} — it is time for your habit. Let’s continue today 💪",
+      "actionDone": "Done",
+      "actionSnooze": "Later"
+    },
+    "snooze": {
+      "title": "{{emoji}} Reminder",
+      "body": "You have not completed it yet. Do you have a moment now?"
+    },
+    "morningGreeting": {
+      "title": "Good morning!",
+      "body": "Today is day {{day}} of your chilla. One more day, one more step 🌿"
+    },
+    "milestone": {
+      "title": "🎉 Day {{day}}!",
+      "body": "You are still moving. Losing is not falling — it is stopping."
+    }
+  },
+  "quotes": {
+    "section": "Today’s thought",
+    "source": "Source"
+  }
+}

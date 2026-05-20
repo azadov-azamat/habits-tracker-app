@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAppLanguage } from '@/hooks/use-app-language';
 import { useNotificationHandler } from '@/hooks/use-notification-handler';
 import { useDailyReconcile } from '@/hooks/use-daily-reconcile';
 import { safeEnsureNotificationSetup } from '@/services/notifications';
@@ -16,6 +17,7 @@ void SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   const theme = useAppTheme();
+  useAppLanguage();
   useNotificationHandler();
   useDailyReconcile();
 

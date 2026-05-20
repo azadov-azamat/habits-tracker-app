@@ -12,15 +12,17 @@ import { AppButton } from '@/components/app-button';
 import { useHabitsStore } from '@/store/habits-store';
 import { computeStreakStats } from '@/services/streak-calculator';
 import { cancelHabitNotifications, safeRescheduleHabit } from '@/services/notifications';
-import { formatDateUz } from '@/utils/date-helpers';
+import { formatDateLocalized } from '@/utils/date-helpers';
 import { reportRecoverableError } from '@/utils/recoverable-error';
 import { formatActionForPreview } from '@/utils/format-action-for-preview';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSettingsStore } from '@/store/settings-store';
 
 export default function HabitDetail() {
   const router = useRouter();
   const theme = useTheme();
   const { t } = useTranslation();
+  const language = useSettingsStore((s) => s.language);
   const params = useLocalSearchParams<{ id: string }>();
   const habit = useHabitsStore((s) => s.habits.find((h) => h.id === params.id));
   const updateHabit = useHabitsStore((s) => s.updateHabit);
@@ -45,7 +47,7 @@ export default function HabitDetail() {
         </Appbar.Header>
         <View style={styles.empty}>
           <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-            Odat topilmadi.
+            {t('habit.notFound')}
           </Text>
         </View>
       </SafeAreaView>
@@ -126,7 +128,7 @@ export default function HabitDetail() {
               </Text>
             )}
             <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-              {t('habit.since')}: {formatDateUz(habit.startDate)}
+              {t('habit.since')}: {formatDateLocalized(habit.startDate, language)}
             </Text>
           </View>
           <StreakBadge streak={stats.currentStreak} />
@@ -159,7 +161,8 @@ export default function HabitDetail() {
               {t('habit.planLabel').toUpperCase()}
             </Text>
             <Text variant="bodyLarge" style={{ color: theme.colors.onSurface, lineHeight: 24 }}>
-              Agar <Text style={{ fontWeight: '700' }}>{habit.intentionWhen}</Text>, men{' '}
+              {t('habit.planPrefix')} <Text style={{ fontWeight: '700' }}>{habit.intentionWhen}</Text>,{' '}
+              {t('habit.planMiddle')}{' '}
               <Text style={{ fontWeight: '700' }}>
                 {formatActionForPreview(habit.intentionThen)}
               </Text>.

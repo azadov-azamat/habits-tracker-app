@@ -3,6 +3,7 @@ import { useSettingsStore } from '@/store/settings-store';
 beforeEach(() => {
   useSettingsStore.setState({
     theme: 'system',
+    language: 'uz',
     notificationsEnabled: true,
     morningGreetingEnabled: true,
     morningGreetingTime: '07:00',
@@ -14,6 +15,7 @@ describe('settingsStore', () => {
   it('has sensible defaults', () => {
     const s = useSettingsStore.getState();
     expect(s.theme).toBe('system');
+    expect(s.language).toBe('uz');
     expect(s.notificationsEnabled).toBe(true);
     expect(s.morningGreetingEnabled).toBe(true);
     expect(s.morningGreetingTime).toBe('07:00');
@@ -25,6 +27,13 @@ describe('settingsStore', () => {
     expect(useSettingsStore.getState().theme).toBe('dark');
     useSettingsStore.getState().setTheme('light');
     expect(useSettingsStore.getState().theme).toBe('light');
+  });
+
+  it('setLanguage changes language', () => {
+    useSettingsStore.getState().setLanguage('en');
+    expect(useSettingsStore.getState().language).toBe('en');
+    useSettingsStore.getState().setLanguage('uz');
+    expect(useSettingsStore.getState().language).toBe('uz');
   });
 
   it('setNotificationsEnabled toggles', () => {

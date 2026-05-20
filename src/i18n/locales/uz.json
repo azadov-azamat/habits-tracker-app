@@ -151,9 +151,12 @@
   },
   "habit": {
     "details": "Odat tafsilotlari",
+    "notFound": "Odat topilmadi.",
     "since": "Boshlangan",
     "newMicroHabit": "Yangi mikro odat",
     "planLabel": "Reja",
+    "planPrefix": "Agar",
+    "planMiddle": "men",
     "easiestVersion": "Eng oson ko‘rinishi",
     "microLimitReached": "Ko‘pi bilan 2 ta mikro odat qo‘shish mumkin",
     "pause": "Vaqtincha to‘xtatish",
@@ -195,6 +198,9 @@
   "settings": {
     "title": "Sozlamalar",
     "appearance": "Ko‘rinish",
+    "language": "Til",
+    "languageUz": "O‘zbekcha",
+    "languageEn": "English",
     "theme": "Mavzu",
     "themeSystem": "Tizim",
     "themeLight": "Yorug‘",

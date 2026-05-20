@@ -3,6 +3,7 @@ import {
   dayNumber,
   daysSince,
   formatDateUz,
+  formatDateLocalized,
   formatTimeHHMM,
   fromDateKey,
   isPastKey,
@@ -139,6 +140,16 @@ describe('dateHelpers', () => {
   describe('formatDateUz', () => {
     it('formats month names in Uzbek', () => {
       expect(formatDateUz('2026-05-18')).toBe('18 may 2026');
+    });
+  });
+
+  describe('formatDateLocalized', () => {
+    it('formats English dates', () => {
+      expect(formatDateLocalized('2026-05-18', 'en')).toBe('May 18, 2026');
+    });
+
+    it('formats Uzbek dates', () => {
+      expect(formatDateLocalized('2026-05-18', 'uz')).toBe('18 may 2026');
     });
   });
 });
