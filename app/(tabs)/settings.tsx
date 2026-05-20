@@ -300,6 +300,9 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 24,
     gap: 8,
+    width: '92%',
+    maxWidth: 460,
+    alignSelf: 'center',
   },
   modalItem: { paddingHorizontal: 0 },
 });

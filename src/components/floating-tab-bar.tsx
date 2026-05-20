@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,15 +17,18 @@ const ICONS: Record<string, IconName> = {
 export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const expanded = width >= 700;
 
   return (
     <View
       pointerEvents="box-none"
-      style={[styles.wrap, { paddingBottom: insets.bottom + 12 }]}
+      style={[styles.wrap, { paddingBottom: insets.bottom + (expanded ? 18 : 12) }]}
     >
       <View
         style={[
           styles.bar,
+          expanded && styles.barExpanded,
           {
             backgroundColor: theme.colors.surface,
             shadowColor: theme.dark ? '#000' : '#1F1A2E',
@@ -62,6 +65,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
               accessibilityLabel={label}
               style={[
                 styles.button,
+                expanded && styles.buttonExpanded,
                 focused && { backgroundColor: theme.colors.primaryContainer },
               ]}
             >
@@ -70,6 +74,19 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
                 size={24}
                 color={focused ? theme.colors.primary : theme.colors.onSurfaceVariant}
               />
+              {expanded ? (
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    styles.label,
+                    {
+                      color: focused ? theme.colors.primary : theme.colors.onSurfaceVariant,
+                    },
+                  ]}
+                >
+                  {label}
+                </Text>
+              ) : null}
             </Pressable>
           );
         })}
@@ -102,11 +119,30 @@ const styles = StyleSheet.create({
       default: {},
     }),
   },
+  barExpanded: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    gap: 10,
+  },
   button: {
     width: 48,
     height: 48,
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonExpanded: {
+    width: 124,
+    height: 52,
+    borderRadius: 26,
+    flexDirection: 'row',
+    gap: 8,
+    paddingHorizontal: 14,
+  },
+  label: {
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0,
   },
 });

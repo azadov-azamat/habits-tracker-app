@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  useWindowDimensions,
   type ScrollViewProps,
   type ViewStyle,
 } from 'react-native';
@@ -30,6 +31,9 @@ export function ScreenScaffold({
   bottomInset = true,
 }: Props) {
   const theme = useTheme();
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 700;
+  const contentMaxWidth = width >= 1000 ? 760 : 680;
   const edges: ('top' | 'bottom' | 'left' | 'right')[] = ['left', 'right'];
   if (topInset) edges.push('top');
   if (bottomInset) edges.push('bottom');
@@ -37,13 +41,30 @@ export function ScreenScaffold({
   const body = scroll ? (
     <ScrollView
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={[styles.scrollContent, contentStyle]}
+      contentContainerStyle={styles.scrollContainer}
       showsVerticalScrollIndicator={false}
     >
-      {children}
+      <View
+        style={[
+          styles.contentFrame,
+          isTablet && [styles.contentFrameTablet, { maxWidth: contentMaxWidth }],
+          contentStyle,
+        ]}
+      >
+        {children}
+      </View>
     </ScrollView>
   ) : (
-    <View style={styles.flex}>{children}</View>
+    <View style={[styles.staticContainer, isTablet && styles.staticContainerTablet]}>
+      <View
+        style={[
+          styles.staticFrame,
+          isTablet && { maxWidth: contentMaxWidth },
+        ]}
+      >
+        {children}
+      </View>
+    </View>
   );
 
   return (
@@ -63,7 +84,14 @@ export function ScreenScaffold({
             footerStyle,
           ]}
         >
-          {footer}
+          <View
+            style={[
+              styles.footerContent,
+              isTablet && [styles.footerContentTablet, { maxWidth: contentMaxWidth }],
+            ]}
+          >
+            {footer}
+          </View>
         </View>
       ) : null}
       <AppErrorBanner />
@@ -73,11 +101,35 @@ export function ScreenScaffold({
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scrollContent: { padding: 20, gap: 16, paddingBottom: 40 },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+  },
+  contentFrame: {
+    width: '100%',
+    padding: 20,
+    gap: 16,
+    paddingBottom: 40,
+  },
+  contentFrameTablet: {
+    paddingTop: 28,
+    paddingHorizontal: 28,
+    paddingBottom: 56,
+  },
+  staticContainer: { flex: 1 },
+  staticContainerTablet: { alignItems: 'center' },
+  staticFrame: { flex: 1, width: '100%' },
   footer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+  },
+  footerContent: {
+    width: '100%',
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 12,
-    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  footerContentTablet: {
+    paddingHorizontal: 28,
   },
 });
