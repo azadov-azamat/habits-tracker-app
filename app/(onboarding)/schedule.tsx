@@ -1,13 +1,14 @@
-import React, { useCallback, useRef } from 'react';
-import { Platform, StyleSheet, TextInput, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { ScreenScaffold } from '@/components/screen-scaffold';
 import { OnboardingFooter } from '@/components/onboarding-footer';
 import { PreviewCard } from '@/components/preview-card';
 import { useOnboardingStore } from '@/store/onboarding-store';
-import { IntervalChips } from '@/components/time-interval-picker';
+import { IntervalChips, dateToTime, timeToDate } from '@/components/time-interval-picker';
 
 const SNOOZE_INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
 const MAX_SNOOZE_OPTIONS = [1, 2, 3, 4, 5];
@@ -18,25 +19,24 @@ export default function Schedule() {
   const { t } = useTranslation();
   const draft = useOnboardingStore((s) => s.draft);
   const setDraft = useOnboardingStore((s) => s.setDraft);
-  const hourInputRef = useRef<TextInput>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const time = draft.reminderTime ?? '08:00';
   const interval = draft.snoozeIntervalMin ?? 15;
   const maxSnoozes = draft.maxSnoozes ?? 3;
-  const [hour, minute] = time.split(':');
   const updateTime = useCallback(
     (reminderTime: string) => setDraft({ reminderTime }),
     [setDraft],
   );
-  const updateTimePart = useCallback(
-    (part: 'h' | 'm', text: string) => {
-      const cleaned = text.replace(/[^0-9]/g, '').slice(0, 2);
-      const h = part === 'h' ? cleaned : hour;
-      const m = part === 'm' ? cleaned : minute;
-      const hi = Math.min(23, parseInt(h || '0', 10));
-      const mi = Math.min(59, parseInt(m || '0', 10));
-      updateTime(`${`${hi}`.padStart(2, '0')}:${`${mi}`.padStart(2, '0')}`);
+  const handlePick = useCallback(
+    (event: DateTimePickerEvent, date?: Date) => {
+      if (Platform.OS !== 'ios') {
+        setPickerOpen(false);
+      }
+      if (event.type === 'set' && date) {
+        updateTime(dateToTime(date));
+      }
     },
-    [hour, minute, updateTime],
+    [updateTime],
   );
   const updateInterval = useCallback(
     (snoozeIntervalMin: number) => setDraft({ snoozeIntervalMin }),
@@ -46,8 +46,6 @@ export default function Schedule() {
     (maxSnoozesValue: number) => setDraft({ maxSnoozes: maxSnoozesValue }),
     [setDraft],
   );
-
-  const keyboardType = Platform.OS === 'ios' ? 'number-pad' : 'numeric';
 
   return (
     <ScreenScaffold
@@ -68,35 +66,36 @@ export default function Schedule() {
         tone="primary"
         centered
         emoji="⏰"
-        onPress={() => hourInputRef.current?.focus()}
+        onPress={() => setPickerOpen((prev) => !prev)}
       >
-        <View style={styles.timeRow}>
-          <TextInput
-            ref={hourInputRef}
-            value={hour}
-            onChangeText={(text) => updateTimePart('h', text)}
-            keyboardType={keyboardType}
-            maxLength={2}
-            selectTextOnFocus
-            style={[
-              styles.timeInput,
-              { color: theme.colors.onPrimaryContainer, borderBottomColor: theme.colors.primary },
-            ]}
-          />
-          <Text style={[styles.timeColon, { color: theme.colors.onPrimaryContainer }]}>:</Text>
-          <TextInput
-            value={minute}
-            onChangeText={(text) => updateTimePart('m', text)}
-            keyboardType={keyboardType}
-            maxLength={2}
-            selectTextOnFocus
-            style={[
-              styles.timeInput,
-              { color: theme.colors.onPrimaryContainer, borderBottomColor: theme.colors.primary },
-            ]}
-          />
-        </View>
+        <Text style={[styles.timeText, { color: theme.colors.onPrimaryContainer }]}>{time}</Text>
+        <Text variant="bodySmall" style={{ color: theme.colors.onPrimaryContainer }}>
+          {t('onboarding.schedule.timeLabel')}
+        </Text>
       </PreviewCard>
+
+      {pickerOpen ? (
+        <View style={styles.pickerWrap}>
+          <DateTimePicker
+            value={timeToDate(time)}
+            mode="time"
+            is24Hour
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            onChange={handlePick}
+          />
+          {Platform.OS === 'ios' ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setPickerOpen(false)}
+              style={styles.doneButton}
+            >
+              <Text variant="labelLarge" style={{ color: theme.colors.primary }}>
+                {t('common.done')}
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         <IntervalChips
@@ -131,16 +130,12 @@ export default function Schedule() {
 const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  timeRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  timeInput: {
-    minWidth: 56,
-    textAlign: 'center',
-    fontSize: 34,
+  timeText: {
+    fontSize: 44,
     fontWeight: '800',
     letterSpacing: 1,
-    paddingVertical: 2,
-    borderBottomWidth: 2,
   },
-  timeColon: { fontSize: 34, fontWeight: '800' },
+  pickerWrap: { alignItems: 'center' },
+  doneButton: { alignSelf: 'flex-end', paddingVertical: 8, paddingHorizontal: 4 },
   section: { gap: 8 },
 });
