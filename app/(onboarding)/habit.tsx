@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Text, TextInput, useTheme } from 'react-native-paper';
+import React, { useCallback, useRef } from 'react';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
@@ -18,6 +18,7 @@ export default function HabitScreen() {
   const language = useSettingsStore((s) => s.language);
   const draft = useOnboardingStore((s) => s.draft);
   const setDraft = useOnboardingStore((s) => s.setDraft);
+  const nameInputRef = useRef<TextInput>(null);
   const name = draft.name ?? '';
   const emoji = draft.emoji ?? '🌱';
   const canContinue = name.trim().length >= 3;
@@ -58,20 +59,20 @@ export default function HabitScreen() {
           </Text>
         </View>
 
-        <PreviewCard tone="primary" centered>
+        <PreviewCard tone="primary" centered onPress={() => nameInputRef.current?.focus()}>
           <Text style={styles.emojiBig}>{emoji}</Text>
-          <Text variant="titleMedium" style={{ color: theme.colors.onPrimaryContainer }}>
-            {name || '...'}
-          </Text>
+          <TextInput
+            ref={nameInputRef}
+            value={name}
+            onChangeText={updateName}
+            placeholder={t('onboarding.habit.namePlaceholder')}
+            placeholderTextColor={theme.colors.onSurfaceVariant}
+            style={[
+              styles.nameInput,
+              { color: theme.colors.onPrimaryContainer, borderBottomColor: theme.colors.primary },
+            ]}
+          />
         </PreviewCard>
-
-        <TextInput
-          mode="outlined"
-          label={t('onboarding.habit.nameLabel')}
-          value={name}
-          onChangeText={updateName}
-          placeholder={t('onboarding.habit.namePlaceholder')}
-        />
 
         <View>
           <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant, marginBottom: 8 }}>
@@ -146,6 +147,14 @@ const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
   emojiBig: { fontSize: 56 },
+  nameInput: {
+    alignSelf: 'stretch',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '600',
+    paddingVertical: 4,
+    borderBottomWidth: 2,
+  },
   emojiRow: { gap: 8 },
   emojiChip: {
     width: 48,

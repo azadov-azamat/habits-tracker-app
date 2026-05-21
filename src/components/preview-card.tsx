@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 
 type Tone = 'primary' | 'secondary' | 'tertiary' | 'neutral';
@@ -11,9 +11,10 @@ type Props = {
   centered?: boolean;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
 };
 
-export function PreviewCard({ tone = 'primary', emoji, label, centered, children, style }: Props) {
+export function PreviewCard({ tone = 'primary', emoji, label, centered, children, style, onPress }: Props) {
   const theme = useTheme();
 
   const { backgroundColor, accent } = (() => {
@@ -41,8 +42,13 @@ export function PreviewCard({ tone = 'primary', emoji, label, centered, children
     }
   })();
 
+  const Container = onPress ? Pressable : View;
+
   return (
-    <View style={[styles.card, { backgroundColor }, centered && styles.cardCentered, style]}>
+    <Container
+      onPress={onPress}
+      style={[styles.card, { backgroundColor }, centered && styles.cardCentered, style]}
+    >
       {label && !centered ? (
         <Text
           variant="labelMedium"
@@ -55,7 +61,7 @@ export function PreviewCard({ tone = 'primary', emoji, label, centered, children
         {emoji ? <Text style={styles.emoji}>{emoji}</Text> : null}
         {children}
       </View>
-    </View>
+    </Container>
   );
 }
 

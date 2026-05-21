@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { Text, TextInput, useTheme } from 'react-native-paper';
+import React, { useCallback, useRef } from 'react';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/components/screen-scaffold';
@@ -10,6 +10,10 @@ import { identityExamplesByLanguage } from '@/data/identity-examples';
 import { useOnboardingStore } from '@/store/onboarding-store';
 import { useSettingsStore } from '@/store/settings-store';
 
+// Unique marker used to split the localized template into the text that comes
+// before and after the editable identity word.
+const VALUE_TOKEN = '__IDENTITY_VALUE__';
+
 export default function Identity() {
   const router = useRouter();
   const theme = useTheme();
@@ -17,6 +21,7 @@ export default function Identity() {
   const language = useSettingsStore((s) => s.language);
   const draft = useOnboardingStore((s) => s.draft);
   const setDraft = useOnboardingStore((s) => s.setDraft);
+  const inputRef = useRef<TextInput>(null);
   const value = draft.identity ?? '';
   const canContinue = value.trim().length >= 2;
   const updateIdentity = useCallback(
@@ -24,8 +29,10 @@ export default function Identity() {
     [setDraft],
   );
 
-  const previewValue = value || t('onboarding.identity.templatePlaceholder');
   const examples = identityExamplesByLanguage[language];
+  const [prefix, suffix] = t('onboarding.identity.template', { value: VALUE_TOKEN }).split(
+    VALUE_TOKEN,
+  );
 
   return (
     <ScreenScaffold
@@ -45,22 +52,37 @@ export default function Identity() {
         </Text>
       </View>
 
-      <PreviewCard tone="primary" label={t('onboarding.identity.label')}>
-        <Text
-          variant="headlineSmall"
-          style={[styles.preview, { color: theme.colors.onPrimaryContainer, fontWeight: '800' }]}
-        >
-          {t('onboarding.identity.template', { value: previewValue })}
-        </Text>
+      <PreviewCard
+        tone="primary"
+        label={t('onboarding.identity.label')}
+        onPress={() => inputRef.current?.focus()}
+      >
+        <View style={styles.sentence}>
+          {prefix ? (
+            <Text variant="headlineSmall" style={[styles.sentenceText, { color: theme.colors.onPrimaryContainer }]}>
+              {prefix.trimEnd()}
+            </Text>
+          ) : null}
+          <TextInput
+            ref={inputRef}
+            value={value}
+            onChangeText={updateIdentity}
+            placeholder={t('onboarding.identity.placeholder')}
+            placeholderTextColor={theme.colors.onSurfaceVariant}
+            autoCapitalize="none"
+            style={[
+              styles.sentenceText,
+              styles.input,
+              { color: theme.colors.onPrimaryContainer, borderBottomColor: theme.colors.primary },
+            ]}
+          />
+          {suffix ? (
+            <Text variant="headlineSmall" style={[styles.sentenceText, { color: theme.colors.onPrimaryContainer }]}>
+              {suffix.trimStart()}
+            </Text>
+          ) : null}
+        </View>
       </PreviewCard>
-
-      <TextInput
-        mode="outlined"
-        value={value}
-        onChangeText={updateIdentity}
-        placeholder={t('onboarding.identity.placeholder')}
-        autoCapitalize="none"
-      />
 
       <View style={styles.chips}>
         {examples.map((ex) => (
@@ -94,7 +116,15 @@ export default function Identity() {
 const styles = StyleSheet.create({
   head: { gap: 6 },
   title: { fontWeight: '800' },
-  preview: { lineHeight: 32 },
+  sentence: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 },
+  sentenceText: { fontSize: 24, lineHeight: 32, fontWeight: '800' },
+  input: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 96,
+    paddingVertical: 2,
+    borderBottomWidth: 2,
+  },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 999, borderWidth: 1 },
 });
