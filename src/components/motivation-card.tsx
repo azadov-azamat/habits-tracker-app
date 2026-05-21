@@ -32,38 +32,46 @@ export function MotivationCard({ variant = 'link' }: Props) {
             ✦
           </Text>
           <Text
-            variant="labelMedium"
-            style={{ color: theme.colors.onSecondaryContainer, letterSpacing: 1 }}
+            variant="labelSmall"
+            style={{ color: theme.colors.onSecondaryContainer, letterSpacing: 1, opacity: 0.8 }}
           >
             {t('quotes.section').toUpperCase()}
           </Text>
         </View>
         <Text
-          variant="titleMedium"
+          variant="bodyMedium"
           style={[styles.inlineQuote, { color: theme.colors.onSecondaryContainer }]}
         >
           “{quote.text}”
         </Text>
-        {quote.author ? (
-          <Text
-            variant="bodySmall"
-            style={{ color: theme.colors.onSecondaryContainer, opacity: 0.7 }}
+        <View style={styles.inlineFooter}>
+          {quote.author ? (
+            <Text
+              variant="labelSmall"
+              style={{ color: theme.colors.onSecondaryContainer, opacity: 0.7 }}
+            >
+              — {quote.author}
+            </Text>
+          ) : null}
+          <Pressable
+            accessibilityRole="link"
+            accessibilityLabel={`${t('quotes.source')}: ${quote.sourceTitle}`}
+            onPress={() => {
+              void Linking.openURL(quote.sourceUrl);
+            }}
           >
-            — {quote.author}
-          </Text>
-        ) : null}
-        <Pressable
-          accessibilityRole="link"
-          accessibilityLabel={`${t('quotes.source')}: ${quote.sourceTitle}`}
-          onPress={() => {
-            void Linking.openURL(quote.sourceUrl);
-          }}
-          style={styles.inlineSource}
-        >
-          <Text variant="labelSmall" style={{ color: theme.colors.onSecondaryContainer }}>
-            {t('quotes.source')}: {quote.sourceTitle}
-          </Text>
-        </Pressable>
+            <Text
+              variant="labelSmall"
+              style={{
+                color: theme.colors.onSecondaryContainer,
+                opacity: 0.7,
+                textDecorationLine: 'underline',
+              }}
+            >
+              {quote.sourceTitle}
+            </Text>
+          </Pressable>
+        </View>
       </View>
     );
   }
@@ -142,12 +150,18 @@ const styles = StyleSheet.create({
   source: { alignSelf: 'center', marginTop: 8 },
 
   inlineCard: {
-    borderRadius: 20,
-    padding: 20,
-    gap: 8,
+    borderRadius: 18,
+    padding: 14,
+    gap: 6,
   },
-  inlineHeader: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  sparkleSmall: { fontSize: 16 },
-  inlineQuote: { lineHeight: 26, fontWeight: '600' },
-  inlineSource: { alignSelf: 'flex-start', marginTop: 4 },
+  inlineHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  sparkleSmall: { fontSize: 13 },
+  inlineQuote: { lineHeight: 21, fontWeight: '600' },
+  inlineFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 2,
+  },
 });
